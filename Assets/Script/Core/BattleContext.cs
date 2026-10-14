@@ -7,15 +7,18 @@ public class BattleContext : MonoBehaviour
 {
     public static BattleContext Current { get; private set; }
     public DamageCalculator DamageCalculator { get; private set; }
+    public EnemyLane EnemyLane { get; private set; }
 
     [field: SerializeField] public PegBoard PegBoard { get; private set; }
     [field: SerializeField] public DeckManager DeckManager { get; private set; }
     [field: SerializeField] public PassiveManager PassiveManager { get; private set; }
+    [field: SerializeField] public Player Player { get; private set; }
 
     private void Awake()
     {
         Current = this;
         DamageCalculator = new DamageCalculator();
+        EnemyLane = new EnemyLane();
     }
 
     private void OnDestroy()

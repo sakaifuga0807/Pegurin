@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
-public class ChargeAction : MonoBehaviour
+
+//溜め攻撃。ダメージはここではまだ与えない。
+[CreateAssetMenu(fileName = "ChargeAction", menuName = "Game/EnemyAction/Charge")]
+public class CharggeAction : EnemyAction
 {
-    // Start is called before the first frame update
-    void Start()
+    public override EnemyIntent GetIntent(Enemy self, EnemyLane lane)
     {
-        
+        return new EnemyIntent(EnemyIntentType.Charge);
     }
 
-    // Update is called once per frame
-    void Update()
+    public override int Execute(Enemy self, EnemyLane lane)
     {
-        
+        return 0;
     }
 }
+

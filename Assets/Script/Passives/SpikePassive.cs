@@ -1,18 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
-public class SpikePassive : MonoBehaviour
+//スパイク:通常ペグに追加攻撃。
+[CreateAssetMenu(fileName ="SpikePassive",menuName ="Game/Passive/Spike")]
+public class SpikePassive:PassiveEffect
 {
-    // Start is called before the first frame update
-    void Start()
+    public override int ModifyNormalPegDamage(int baseDamage)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return baseDamage + GameConstants.SpikeBonus;
     }
 }
