@@ -1,18 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackAction : MonoBehaviour
+//UŒ‚BisHeavy‚ªtrue‚È‚ç‹­UŒ‚E‘å‹Z(UŒ‚—Í*‹­UŒ‚”{—¦)
+[CreateAssetMenu(fileName ="AttackAction",menuName ="Game/EnemyAction/Attack")]
+public class AttackAction:EnemyAction
 {
-    // Start is called before the first frame update
-    void Start()
+    [Tooltip("true‚È‚ç‹­UŒ‚E‘å‹Z")]
+    [SerializeField] private bool isHeavy = false;
+
+    private int GetDamage(Enemy self)
     {
-        
+        return isHeavy ? self.HeavyAttackDamage : self.NormalAttackDamage;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override EnemyIntent GetIntent(Enemy self, EnemyLane lane)
     {
-        
+        var type = isHeavy ? EnemyIntentType.HeavyAttack : EnemyIntentType.Attack;
+        return new EnemyIntent(type, GetDamage(self));
+    }
+
+    public override int Execute(Enemy self, EnemyLane lane)
+    {
+        return GetDamage(self);
     }
 }
