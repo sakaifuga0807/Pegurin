@@ -18,10 +18,8 @@ public class  Enemy
     public int CurrentCell { get; private set; }
     //現在の行動の現在位置。
     public int ActionIndex { get; private set; }
-    public bool IsSummonedThisTurn { get; private set; }
-
     public bool IsDead => CurrentHp <= 0;
-    public bool IsInRange { get; private set; }
+    public bool IsInRange => CurrentCell <= Data.Range;
 
     //通常の敵はdata.StartCell、召喚された敵は召喚時の空きマスを渡す。
     public Enemy(EnemyData data,int startCell)

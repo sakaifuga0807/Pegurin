@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 //シーン内の主要参照をまとめておくコンテナ。(シングルトンにはせずにシーンに一つだけ)
@@ -12,7 +13,10 @@ public class BattleContext : MonoBehaviour
     [field: SerializeField] public PegBoard PegBoard { get; private set; }
     [field: SerializeField] public DeckManager DeckManager { get; private set; }
     [field: SerializeField] public PassiveManager PassiveManager { get; private set; }
+    [field: SerializeField] public BattleStateMachine BattleStateMachine { get; private set; }
     [field: SerializeField] public Player Player { get; private set; }
+    [field: SerializeField] public RunManager RunManager { get; private set; }
+    [field: SerializeField] public SoundPlayer SoundPlayer { get; private set; }
 
     private void Awake()
     {
