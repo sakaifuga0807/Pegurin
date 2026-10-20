@@ -430,7 +430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PassiveManager
   allPassives:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 2e2b0006c38232c4183661722e78000a, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -526,7 +526,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f411673edbc5b0b4f8838623234091a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RunManager
-  stages: []
+  stages:
+  - stageName: Stage1
+    layout: 0
+    enemies:
+    - {fileID: 11400000, guid: e29c495e3c0075c4a954caf3532e98b0, type: 2}
+    - {fileID: 11400000, guid: 13a8886c0201b664d9ab46346894a01e, type: 2}
+    isBoss: 0
+    bossData: {fileID: 0}
+  - stageName: Stage2
+    layout: 1
+    enemies:
+    - {fileID: 0}
+    isBoss: 0
+    bossData: {fileID: 0}
+  - stageName: Stage3
+    layout: 2
+    enemies:
+    - {fileID: 0}
+    - {fileID: 0}
+    isBoss: 0
+    bossData: {fileID: 0}
+  - stageName: BossStage
+    layout: 0
+    enemies: []
+    isBoss: 1
+    bossData: {fileID: 0}
   rewardOrbOptions:
   - {fileID: 0}
   - {fileID: 0}
