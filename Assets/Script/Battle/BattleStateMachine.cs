@@ -10,18 +10,9 @@ public class BattleStateMachine : MonoBehaviour
     //現在のステート。外部からは読み取り用。
     public IBattleState CurrentState { get; private set; }
 
-    //ステージの敵リスト。
-    [SerializeField] private List<EnemyData> testEnemies = new List<EnemyData>();
-
-    private void Start()
+    //戦闘開始。RunManagerがステージ開始のたびに呼ぶ。
+    public void StartBattle()
     {
-        //戦闘開始時に山札を初期化。
-        BattleContext.Current.DeckManager.InitializeDeck();
-
-        //敵れーを初期マスで作り直す。
-        BattleContext.Current.EnemyLane.Setup(testEnemies);
-
-        //最初にTurnStartステートに遷移。
         ChangeState(new TurnStartState());
     }
 
@@ -32,24 +23,28 @@ public class BattleStateMachine : MonoBehaviour
         CurrentState.Enter(this);
     }
 
-    //仮実装としてステートの遷移を確かめる。
-    private void Update()
+
+
+    //弾を発射したとき、発射した時点で、引いていたオーブを捨て札へ送る。
+    public void OnOrbLaunched()
     {
-        //左クリックで発射。
-        if(CurrentState is PlayerInputState&&Input.GetMouseButtonDown(0))
+        if(!(CurrentState is PlayerInputState))
         {
-            //発射した時点でオーブを捨て札へ送る。
-            BattleContext.Current.DeckManager.DiscardCurrentOrb();
-            //ステートを玉が飛んでるステートに遷移。
-            ChangeState(new OrbInFlightState());
+            return;
         }
-        //玉が飛んでる間に左クリックでダメージを与える。
-        else if (CurrentState is OrbInFlightState&& Input.GetMouseButtonDown(0))
+
+        BattleContext.Current.DeckManager.DiscardCurrentOrb();
+        ChangeState(new OrbInFlightState());
+    }
+
+    //このターンの弾が落ちたとき、玉が全て落ちたかの判定。
+    public void OnOrbLanded()
+    {
+        if(!(CurrentState is OrbInFlightState))
         {
-            //[仮実装] ダメージの計算は後で作るので、ここでは固定値を足す。
-            BattleContext.Current.DamageCalculator.AddBaseDamage(10);
-            //ステートを合計ダメージステートに遷移。
-            ChangeState(new ResolutionState());
+            return;
         }
+
+        ChangeState(new ResolutionState());
     }
 }
