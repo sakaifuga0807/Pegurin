@@ -383,8 +383,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a3e56d3d0ea023a4d8d72855c2150b31, type: 2}
   - {fileID: 11400000, guid: a3e56d3d0ea023a4d8d72855c2150b31, type: 2}
   - {fileID: 11400000, guid: a3e56d3d0ea023a4d8d72855c2150b31, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 6ff01afaea79ed94db1a2ede5f9a057a, type: 2}
+  - {fileID: 11400000, guid: b5cf787ae95eff14cb0f06220d564025, type: 2}
 --- !u!4 &757632730
 Transform:
   m_ObjectHideFlags: 0
@@ -431,9 +431,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PassiveManager
   allPassives:
   - {fileID: 11400000, guid: 2e2b0006c38232c4183661722e78000a, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 9d3a5abd6d656214b8a6521da9fb9b9d, type: 2}
+  - {fileID: 11400000, guid: c9afcea95adc2e0468f7728c4e03c692, type: 2}
+  - {fileID: 11400000, guid: a02094406bbbc414caf13285073ddafb, type: 2}
 --- !u!4 &1054106187
 Transform:
   m_ObjectHideFlags: 0
@@ -537,26 +537,27 @@ MonoBehaviour:
   - stageName: Stage2
     layout: 1
     enemies:
-    - {fileID: 0}
+    - {fileID: 11400000, guid: ed43fcdb230b13f4aaf1e9682cd20553, type: 2}
     isBoss: 0
     bossData: {fileID: 0}
   - stageName: Stage3
     layout: 2
     enemies:
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 11400000, guid: 186e286844addb74aa593def82b97e2f, type: 2}
+    - {fileID: 11400000, guid: d5ddcf9dd5047d04bbea191ef56c7f0a, type: 2}
     isBoss: 0
     bossData: {fileID: 0}
   - stageName: BossStage
     layout: 0
     enemies: []
     isBoss: 1
-    bossData: {fileID: 0}
+    bossData: {fileID: 11400000, guid: 29fe59bac7f10c24d8b26a8c804b356c, type: 2}
   rewardOrbOptions:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: d73cb3c815801cc4693951a56cb728fc, type: 2}
+  - {fileID: 11400000, guid: 681516d9cf81a9d4aa121263e5573937, type: 2}
+  - {fileID: 11400000, guid: 26aa205081a64b845a60876ddf3eb4b1, type: 2}
   stateMachine: {fileID: 722819457}
+  autoStart: 1
 --- !u!4 &2089675873
 Transform:
   m_ObjectHideFlags: 0

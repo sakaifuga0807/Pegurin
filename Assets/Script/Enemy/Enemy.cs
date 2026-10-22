@@ -14,7 +14,7 @@ public class  Enemy
     public EnemyData Data { get; }
     //現在のHP。0以下で死亡。
     public int CurrentHp { get; private set; }
-    //現在のレーンの位置。0が一番手前。
+    //現在のレーンの位置。1が一番手前。
     public int CurrentCell { get; private set; }
     //現在の行動の現在位置。
     public int ActionIndex { get; private set; }

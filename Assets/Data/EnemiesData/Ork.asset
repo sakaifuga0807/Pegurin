@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyName: Ork
   maxHp: 220
   attackPower: 18
-  startCell: 1
+  startCell: 4
   moveSpeed: 1
   range: 1
   actionPattern:

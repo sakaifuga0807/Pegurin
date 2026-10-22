@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 //ペグのレイアウトの種類。
 public enum PegLayoutType { VShape,Diamond,Grid}
 
 //ランの進行段階。
-public enum RunPhase { None,Battle,Reward,Map,Cleared,GameOver}
+public enum RunPhase { Title,Battle,Reward,Map,Cleared,GameOver}
 
-//ランの進行段階。
+//ステージ一つ分の構成。
 [Serializable]
 public class StageConfig
 {
@@ -30,7 +31,14 @@ public class RunManager:MonoBehaviour
 
     [SerializeField] private BattleStateMachine stateMachine;
 
-    public RunPhase Phase { get; private set; } = RunPhase.None;
+    [Header("確認用")]
+    [Tooltip("タイトル画面ができるまでの確認用")]
+    [SerializeField] private bool autoStart = true;
+
+    public event Action OnRunStarted;           //ラン開始。
+    public event Action OnReturnedToTitle;      //タイトルへ戻る。
+
+    public RunPhase Phase { get; private set; } = RunPhase.Title;
     public int StageIndex { get; private set; }
 
     public StageConfig CurrentStage =>
@@ -49,7 +57,7 @@ public class RunManager:MonoBehaviour
     private void Start()
     {
         BattleContext.Current.Player.OnDied += HandlePlayerDied;
-        StartRun();
+        if(autoStart) StartRun();
     }
 
     private void OnDestroy()
@@ -61,21 +69,48 @@ public class RunManager:MonoBehaviour
     }
 
     //ランとステージの開始。
-    private void StartRun()
+    public void StartRun()
     {
+        //タイトル以外では開始しない。
+        if (Phase != RunPhase.Title) return;
+
         if(stages.Count==0)
         {
             Debug.LogError("RunManagerのStagesが空です。");
             return;
         }
-
+        var context = BattleContext.Current;
         StageIndex = 0;
-        BattleContext.Current.Player.ResetForRun();
-        if(BattleContext.Current.PassiveManager!=null)
+        context.Player.ResetForRun();
+        if(context.PassiveManager!=null)
         {
-            BattleContext.Current.PassiveManager.ResetForRun();
+            context.PassiveManager.ResetForRun();
         }
+        context.DeckManager.ResetForRun();
+
+        OnRunStarted?.Invoke();
         StartStage();
+    }
+
+    //ゲームクリア・オーバー画面のもう一度から呼ぶ。
+    public void RestartRun()
+    {
+        if (Phase != RunPhase.Cleared && Phase != RunPhase.GameOver) return;
+
+        Phase = RunPhase.Title;
+        StartRun();
+    }
+
+    //ゲームクリア・オーバー画面のタイトルへから呼ぶ。
+    public void ReturnToTitle()
+    {
+        if (Phase != RunPhase.Cleared && Phase != RunPhase.GameOver) return;
+
+        stateMachine.Stop();
+        BattleContext.Current.EnemyLane.Clear();
+        Phase = RunPhase.Title;
+        Debug.Log("タイトルへ戻りました");
+        OnReturnedToTitle?.Invoke();
     }
 
     //ステージ開始。
@@ -247,4 +282,13 @@ public class RunManager:MonoBehaviour
             SelectRewardPassive(currentPassiveOptions[0]);
         }
     }
+
+    [ContextMenu("テスト:スタート")]
+    private void TestStart() { StartRun(); }
+    [ContextMenu("テスト:ゲームオーバーにする")]
+    private void TestGameOver() { BattleContext.Current.Player.TakeDamage(99999); }
+    [ContextMenu("テスト:もう一度")]
+    private void TestRestart() { RestartRun(); }
+    [ContextMenu("テスト:タイトルへ")]
+    private void TestReturnToTitle() { ReturnToTitle(); }
 }

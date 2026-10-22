@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyName: Skeleton
   maxHp: 150
   attackPower: 10
-  startCell: 1
+  startCell: 3
   moveSpeed: 2
   range: 1
   actionPattern:
