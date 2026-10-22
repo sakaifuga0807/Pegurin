@@ -17,7 +17,7 @@ MonoBehaviour:
   attackPower: 15
   startCell: 5
   moveSpeed: 1
-  range: 1
+  range: 2
   actionPattern:
   - {fileID: 11400000, guid: f726f165d10a4ec4e8c8eff527303479, type: 2}
   - {fileID: 11400000, guid: e6ba84ee80f68a3408596bcd15200627, type: 2}

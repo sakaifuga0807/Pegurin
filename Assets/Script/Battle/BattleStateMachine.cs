@@ -47,4 +47,35 @@ public class BattleStateMachine : MonoBehaviour
 
         ChangeState(new ResolutionState());
     }
+
+    //戦闘を止める。
+    public void Stop()
+    {
+        CurrentState = null;
+    }
+
+    //消してねー
+    [ContextMenu("テスト：撃たずに1ターン進める")]
+    private void TestSkipTurn()
+    {
+        OnOrbLaunched();
+        OnOrbLanded();
+    }
+
+    [ContextMenu("テスト：10ダメージを与える")]
+    private void TestDamage10()
+    {
+        OnOrbLaunched();
+        BattleContext.Current.DamageCalculator.AddPegHit(10, 10);
+        OnOrbLanded();
+    }
+
+    [ContextMenu("テスト：130ダメージを与える")]
+    private void TestDamage130()
+    {
+        OnOrbLaunched();
+        BattleContext.Current.DamageCalculator.AddPegHit(130, 10);
+        OnOrbLanded();
+    }
+
 }

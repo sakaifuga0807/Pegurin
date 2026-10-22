@@ -20,6 +20,17 @@ public class ResolutionState : IBattleState
         //取得したダメージを表示。
         Debug.Log($"合計ダメージ{(target!=null?target.Data.EnemyName+"残HP:"+target.CurrentHp:"対象なし")}");
 
+        //SE:ダメージが入った時。
+        if(target!=null&&totalDamage>0)
+        {
+            SoundPlayer.PlayCue(SeCue.DamageDealt);
+        }
+        //SE:倒れたとき。
+        if(target!=null&&target.IsDead)
+        {
+            SoundPlayer.PlayCue(SeCue.EnemyDefeated);
+        }
+
         //ステージクリアなら敵のターンは行わない。
         if(context.RunManager.TryCompleteStage())
         {
@@ -27,6 +38,6 @@ public class ResolutionState : IBattleState
         }
 
         //ターン終了。
-        stateMachine.ChangeState(new TurnEndState());
+        stateMachine.ChangeState(new EnemyTurnState());
     }
 }

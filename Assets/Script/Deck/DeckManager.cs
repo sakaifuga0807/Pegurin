@@ -87,4 +87,15 @@ public class DeckManager : MonoBehaviour
         runDeck.Add(newOrb);
         OnChanged?.Invoke();
     }
+
+    //ラン開始時に呼ぶ。所持デッキを初期状態に戻す。
+    public void ResetForRun()
+    {
+        runDeck.Clear();
+        runDeck.AddRange(initialDeck);
+        drawPile.Clear();
+        discardPile.Clear();
+        CurrentOrb = null;
+        OnChanged?.Invoke();
+    }
 }
