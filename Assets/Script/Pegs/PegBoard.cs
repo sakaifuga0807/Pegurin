@@ -1,18 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PegBoard : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private List<Peg> allPegs = new List<Peg>();
+
+    private void Awake()
     {
-        
+        Peg[] foundPegs = GetComponentsInChildren<Peg>(true);
+        allPegs = new List<Peg>(foundPegs);
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// ”Õ–Ê‚ÌƒyƒO‚ð‘S•œŠˆ‚³‚¹‚é
+    /// </summary>
+    public void RefreshAllPegs()
     {
-        
+        foreach (var peg in allPegs)
+        {
+            if (peg != null)
+            {
+                peg.ResetPegState();
+            }
+        }
     }
 }

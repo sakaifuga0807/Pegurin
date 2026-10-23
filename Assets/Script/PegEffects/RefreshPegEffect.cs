@@ -1,18 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class RefreshPegEffect : MonoBehaviour
+[CreateAssetMenu(menuName = "PegEffects/RefreshPeg")]
+public class RefreshPegEffect : PegEffect
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Execute(PegHitContext context)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        PegHitRules.HitRefresh(context);
     }
 }
