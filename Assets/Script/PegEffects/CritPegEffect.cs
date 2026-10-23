@@ -1,18 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CritPegEffect : MonoBehaviour
+[CreateAssetMenu(menuName = "PegEffects/CritPeg")]
+public class CritPegEffect : PegEffect
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Execute(PegHitContext context)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        PegHitRules.HitCritical(context);
     }
 }
