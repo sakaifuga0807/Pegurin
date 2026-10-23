@@ -27,6 +27,8 @@ public class EnemyData : ScriptableObject
     [Header("見た目")]
     [SerializeField] private Sprite icon; //アイコン。
 
+    [SerializeField] private GameObject modelPrefab;//敵のモデル。
+
     //読み込み専用。
     public string EnemyName => enemyName;
     public int MaxHp => maxHp;
@@ -36,6 +38,7 @@ public class EnemyData : ScriptableObject
     public int Range=> range;
     public IReadOnlyList<EnemyAction> ActionPattern => actionPattern;
     public Sprite Icon => icon;
+    public GameObject ModelPrefab => modelPrefab;
 
     //インスペクターでの入力ミスを範囲内に補正。
     private void OnValidate()
