@@ -10,6 +10,11 @@ public class TurnStartState : IBattleState
         //前のターンの合計ダメージをリセット。
         BattleContext.Current.DamageCalculator.Reset();
 
+        if (BattleContext.Current.PegBoard != null)
+        {
+            BattleContext.Current.PegBoard.RestoreAllIfEmpty();
+        }
+
         //安全ネットの使用済みを戻す。
         var passiveManager = BattleContext.Current.PassiveManager;
         if (passiveManager != null) passiveManager.ResetTurn();
