@@ -18,7 +18,7 @@ public class Orb : MonoBehaviour
     [SerializeField] private int trailCount = 30;              // 軌跡の長さ（数）
     [SerializeField] private float recordIntervalFrames = 0.01f; // 軌跡を記録する頻度
 
-    private OrbData currentOrbData;      // 現在保持しているオーブのデータ
+    [SerializeField] private OrbData currentOrbData;      //インスペクターから入れられるようにする。
     private Rigidbody2D rb;              // 物理演算用コンポーネント
     private float defaultGravityScale = 1f;
 
@@ -48,6 +48,9 @@ public class Orb : MonoBehaviour
             SetupOrb(currentOrbData);
         }
     }
+
+    //当たったペグのダメージ計算に使う威力。
+    public int Power => currentOrbData != null ? currentOrbData.power : 0;
 
     public void SetupOrb(OrbData data)
     {

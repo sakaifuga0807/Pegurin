@@ -1,23 +1,55 @@
+using Mono.Cecil.Cil;
+using Unity.Multiplayer.PlayMode;
 using UnityEngine;
 
+
+//ペグに当たった時のルール。
 public static class PegHitRules
-{
-    public static void HitNormal(PegHitContext context)
+{ 
+    //通常ペグ。
+    public static void HitNormal(PegHitContext contexet)
     {
-        Debug.Log($"[PegHitRules] ノーマルペグヒット (Orb: {context.orb.name})");
+        var battle = BattleContext.Current;
+        if (battle == null) return;
+
+        int damage = GameConstants.PegBaseDamage;
+        if(battle.PassiveManager!=null)
+        {
+            damage = battle.PassiveManager.ModifyNormalPegDamage(damage);
+        }
+        battle.DamageCalculator.AddPegHit(damage, contexet.orb.Power);
+        SoundPlayer.PlayCue(SeCue.PegHitNormal);
+        Debug.Log($"[Peg]通常+{damage}(威力{contexet.orb.Power})");
     }
 
+    //クリティカルペグ。スパイクには加算しない。
     public static void HitCritical(PegHitContext context)
     {
-        Debug.Log($"[PegHitRules] クリティカルペグヒット！");
+        var battle = BattleContext.Current;
+        if (battle == null) return;
+
+        battle.DamageCalculator.AddPegHit(GameConstants.PegBaseDamage, context.orb.Power);
+        battle.DamageCalculator.AddCritMultiplier();
+        SoundPlayer.PlayCue(SeCue.PegHitCrit);
+        Debug.Log("[peg]クリティカル倍率+0.5");
     }
 
+    //リフレッシュペグ。消えているペグを全て復活させて、リフレッシュ爆発に知らせる。
     public static void HitRefresh(PegHitContext context)
     {
-        Debug.Log($"[PegHitRules] リフレッシュペグ発動：盤面を全復活");
-        if (context.board != null)
+        var battle = BattleContext.Current;
+        if (battle == null) return;
+
+        battle.DamageCalculator.AddPegHit(GameConstants.PegBaseDamage, context.orb.Power);
+        if(context.board!=null)
         {
             context.board.RefreshAllPegs();
         }
+        if(battle.PassiveManager!=null)
+        {
+            battle.PassiveManager.NotifyRefreshPegTriggered();
+        }
+        SoundPlayer.PlayCue(SeCue.PegHitRefresh);
+        Debug.Log("[peg]リフレッシュ");
     }
 }

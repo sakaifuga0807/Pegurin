@@ -3,6 +3,7 @@ using UnityEngine;
 public static class GameConstants
 {
     public const int OrbPowerBase = 10;                 //威力/この値=倍率。
+    public const int PegBaseDamage = 10;                //ペグの基礎ダメージ。上記の変数とは違う意味がある。
     public const float HeavyAttackMultiplier = 2f;      //強攻撃・大技の倍率。
     public const float MultiplierInitial = 1f;          //倍率の初期化。
     public const float CritMultiplierAdd = 0.5f;        //クリティカルペグ1個当たりの倍率の加算。

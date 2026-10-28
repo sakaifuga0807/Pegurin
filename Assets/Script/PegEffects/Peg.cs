@@ -45,12 +45,15 @@ public class Peg : MonoBehaviour
             Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
         }
 
-        // 効果に渡す情報を構造体（PegHitContext）にまとめる
-        if (pegEffect != null)
+        // 効果に渡す情報を構造体（PegHitContext）にまとめる。
+        if(pegEffect!=null)
         {
             PegHitContext context = new PegHitContext(orb, this, parentBoard);
             pegEffect.Execute(context);
         }
+
+        //リフレッシュで自分も復活したときは、消さない。
+        if (!isHit) return;
 
         StartCoroutine(ShrinkAndDisableRoutine());
     }
@@ -79,6 +82,7 @@ public class Peg : MonoBehaviour
 
     public void ResetPegState()
     {
+        StopAllCoroutines();
         isHit = false;
         if (pegCollider != null) pegCollider.enabled = true;
         transform.localScale = initialScale;
