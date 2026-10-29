@@ -185,4 +185,17 @@ public class Orb : MonoBehaviour
             if (node != null) node.transform.position = transform.position;
         }
     }
+
+    private void OnDestroy()
+    {
+        // オーブが破壊されるときに、管理しているテールノードも一緒に消去する
+        foreach (var node in trailNodes)
+        {
+            if (node != null)
+            {
+                Destroy(node);
+            }
+        }
+        trailNodes.Clear();
+    }
 }
