@@ -213,7 +213,7 @@ MonoBehaviour:
   <BattleStateMachine>k__BackingField: {fileID: 722819457}
   <Player>k__BackingField: {fileID: 192724482}
   <RunManager>k__BackingField: {fileID: 2089675872}
-  <SoundPlayer>k__BackingField: {fileID: 1658517736}
+  <SoundPlayer>k__BackingField: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,7 +481,7 @@ MonoBehaviour:
   entries: []
   masterVolume: 1
   voiceCount: 8
-  logPlays: 1
+  logPlays: 0
 --- !u!4 &1658517737
 Transform:
   m_ObjectHideFlags: 0

@@ -134,8 +134,8 @@ public class BgmPlayer:MonoBehaviour
         if (routine != null)
         {
             StopCoroutine(routine);
-            routine = StartCoroutine(FadeRoutine(clip, volume * masterVolume, delay));
         }
+        routine = StartCoroutine(FadeRoutine(clip, volume * masterVolume, delay));
     }
 
     private IEnumerator FadeRoutine(AudioClip clip,float targetVolume,float delay)
