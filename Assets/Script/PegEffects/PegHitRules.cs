@@ -1,4 +1,3 @@
-using Mono.Cecil.Cil;
 using Unity.Multiplayer.PlayMode;
 using UnityEngine;
 
@@ -22,7 +21,7 @@ public static class PegHitRules
         Debug.Log($"[Peg]通常+{damage}(威力{contexet.orb.Power})");
     }
 
-    //クリティカルペグ。スパイクには加算しない。
+    //クリティカルペグ
     public static void HitCritical(PegHitContext context)
     {
         var battle = BattleContext.Current;
@@ -34,18 +33,18 @@ public static class PegHitRules
         Debug.Log("[peg]クリティカル倍率+0.5");
     }
 
-    //リフレッシュペグ。消えているペグを全て復活させて、リフレッシュ爆発に知らせる。
+    //リフレッシュペグ
     public static void HitRefresh(PegHitContext context)
     {
         var battle = BattleContext.Current;
         if (battle == null) return;
 
         battle.DamageCalculator.AddPegHit(GameConstants.PegBaseDamage, context.orb.Power);
-        if(context.board!=null)
+        if (context.board != null)
         {
-            context.board.RefreshAllPegs();
+            context.board.RefreshAllPegs(context.peg);
         }
-        if(battle.PassiveManager!=null)
+        if (battle.PassiveManager != null)
         {
             battle.PassiveManager.NotifyRefreshPegTriggered();
         }
