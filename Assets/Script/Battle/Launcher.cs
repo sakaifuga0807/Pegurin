@@ -12,7 +12,7 @@ public class Launcher : MonoBehaviour
     [SerializeField] private float defaultPower = 1500f;
 
     [Header("角度制限（下向き・左右に向けられるように拡大）")]
-    [SerializeField] private float minAngle = 120f;
+    [SerializeField] private float minAngle = 90f;
     [SerializeField] private float maxAngle = 270f;
 
     [Header("ガイド線（軌道予測）の設定")]

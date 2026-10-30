@@ -12,6 +12,11 @@ public class Peg : MonoBehaviour
     [SerializeField] private PegEffect pegEffect;
     [SerializeField] private GameObject hitEffectPrefab;
 
+    [Header("ダウングレード（変化）設定")]
+    [SerializeField] private PegEffect normalPegEffect; // 変化後のノーマルペグ用エフェクト
+    [SerializeField] private Color normalPegColor = Color.white; // 変化後の色
+    private bool hasBeenDepleted = false; // 一度使われた（枯渇した）かどうかのフラグ
+
     private CircleCollider2D pegCollider;
     private SpriteRenderer spriteRenderer;
     private Vector3 initialScale;
@@ -45,14 +50,22 @@ public class Peg : MonoBehaviour
             Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
         }
 
-        // 効果に渡す情報を構造体（PegHitContext）にまとめる。
-        if(pegEffect!=null)
+        // 効果を実行
+        if (pegEffect != null)
         {
             PegHitContext context = new PegHitContext(orb, this, parentBoard);
             pegEffect.Execute(context);
         }
 
-        //リフレッシュで自分も復活したときは、消さない。
+        // ★【重要】一度ヒットしたら、次回からは「ノーマルペグ」に変化させる処理
+        if (!hasBeenDepleted && normalPegEffect != null)
+        {
+            hasBeenDepleted = true;
+            pegEffect = normalPegEffect; // エフェクトをノーマルに書き換える
+            initialColor = normalPegColor; // 次回復活時の色もノーマル用に更新
+        }
+
+        // リフレッシュ等の効果によって自分自身が復活した場合は、消滅処理を行わない
         if (!isHit) return;
 
         StartCoroutine(ShrinkAndDisableRoutine());
@@ -80,13 +93,41 @@ public class Peg : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    // 外部からエフェクトと色を動的に設定するメソッド
+    public void SetPegEffect(PegEffect newEffect, Color pegColor)
+    {
+        pegEffect = newEffect;
+        initialColor = pegColor; // 変数にしっかり保持する
+        hasBeenDepleted = false;
+
+        // 確実に即座にスプライトの色を反映させる
+        ApplyColor(initialColor);
+    }
+
     public void ResetPegState()
     {
         StopAllCoroutines();
         isHit = false;
         if (pegCollider != null) pegCollider.enabled = true;
         transform.localScale = initialScale;
-        if (spriteRenderer != null) spriteRenderer.color = initialColor;
+
+        // 復活時も保持している色で確実に塗り直す
+        ApplyColor(initialColor);
+
         if (!gameObject.activeSelf) gameObject.SetActive(true);
+    }
+
+    // 色を適用する専用の小分けメソッド（Nullチェック安全版）
+    private void ApplyColor(Color col)
+    {
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = col;
+        }
     }
 }
