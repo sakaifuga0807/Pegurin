@@ -795,7 +795,7 @@ MonoBehaviour:
   entries: []
   masterVolume: 1
   voiceCount: 8
-  logPlays: 1
+  logPlays: 0
 --- !u!4 &1658517737
 Transform:
   m_ObjectHideFlags: 0

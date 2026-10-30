@@ -23,7 +23,7 @@ public class ResolutionState : IBattleState
         //SE:ダメージが入った時。
         if(target!=null&&totalDamage>0)
         {
-            SoundPlayer.PlayCue(SeCue.DamageDealt);
+           SoundPlayer.PlayCue(SeCue.DamageDealt);
         }
         //SE:倒れたとき。
         if(target!=null&&target.IsDead)
