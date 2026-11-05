@@ -29,6 +29,9 @@ public class EnemyData : ScriptableObject
 
     [SerializeField] private GameObject modelPrefab;//敵のモデル。
 
+    [Tooltip("敵の見た目の大きさの倍率。")]
+    [Min(0.1f)][SerializeField] private float visualScale = 1f;
+
     //読み込み専用。
     public string EnemyName => enemyName;
     public int MaxHp => maxHp;
@@ -39,6 +42,7 @@ public class EnemyData : ScriptableObject
     public IReadOnlyList<EnemyAction> ActionPattern => actionPattern;
     public Sprite Icon => icon;
     public GameObject ModelPrefab => modelPrefab;
+    public float VisualScale => visualScale;
 
     //インスペクターでの入力ミスを範囲内に補正。
     private void OnValidate()
