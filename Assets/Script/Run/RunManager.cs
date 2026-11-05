@@ -57,7 +57,7 @@ public class RunManager:MonoBehaviour
     private void Start()
     {
         BattleContext.Current.Player.OnDied += HandlePlayerDied;
-        if(autoStart) StartRun();
+        if (autoStart) BeginRun();
     }
 
     private void OnDestroy()
@@ -68,8 +68,16 @@ public class RunManager:MonoBehaviour
         }
     }
 
-    //ランとステージの開始。
+    //タイトルのスタートボタンから呼ぶ。
     public void StartRun()
+    {
+        if (Phase != RunPhase.Title) return;
+        SE.Play(SeCue.UiConfirm);
+        BeginRun();
+    }
+
+    //ランとステージの開始。
+    public void BeginRun()
     {
         //タイトル以外では開始しない。
         if (Phase != RunPhase.Title) return;
@@ -98,7 +106,8 @@ public class RunManager:MonoBehaviour
         if (Phase != RunPhase.Cleared && Phase != RunPhase.GameOver) return;
 
         Phase = RunPhase.Title;
-        StartRun();
+        SE.Play(SeCue.UiConfirm);
+        BeginRun();
     }
 
     //ゲームクリア・オーバー画面のタイトルへから呼ぶ。
@@ -124,6 +133,10 @@ public class RunManager:MonoBehaviour
         context.DeckManager.InitializeDeck();
 
         Debug.Log($"ステージ{StageIndex + 1}開始:{stage.stageName}(レイアウト：{stage.layout})");
+
+        //ボスのステージの開始は、登場のジングルを鳴らす。
+        if (stage.isBoss) SE.Play(SeCue.BossApper);
+
         OnStageStarted?.Invoke(StageIndex, stage);
 
         stateMachine.StartBattle();
@@ -160,7 +173,7 @@ public class RunManager:MonoBehaviour
             return false;
         }
 
-        SoundPlayer.PlayCue(SeCue.StageClear);
+        SE.Play(SeCue.StageClear);
 
         //ボス撃破。残りの敵を消す。
         if(stage.isBoss)
@@ -215,7 +228,7 @@ public class RunManager:MonoBehaviour
 
         BattleContext.Current.DeckManager.AddOrbToDeck(orb);
         orbChosen = true;
-        SoundPlayer.PlayCue(SeCue.RewardSelect);//SE:報酬選択。
+        SE.Play(SeCue.RewardSelect);//SE:報酬選択。
         Debug.Log($"オーブを獲得:{orb.orbName}");
         TryFinishReward();
     }
@@ -230,7 +243,7 @@ public class RunManager:MonoBehaviour
 
         BattleContext.Current.PassiveManager.Add(passive);
         passiveChosen = true;
-        SoundPlayer.PlayCue(SeCue.RewardSelect);//SE:報酬選択。
+        SE.Play(SeCue.RewardSelect);//SE:報酬選択。
         Debug.Log($"パッシブを獲得。{passive.PassiveName}");
         TryFinishReward();
     }
@@ -265,7 +278,7 @@ public class RunManager:MonoBehaviour
         }
 
         Phase = RunPhase.GameOver;
-        SoundPlayer.PlayCue(SeCue.GameOver);//SE:ゲームオーバー。
+        SE.Play(SeCue.GameOver);//SE:ゲームオーバー。
         Debug.Log("ゲームオーバー");
         OnRunGameOver?.Invoke();
     }

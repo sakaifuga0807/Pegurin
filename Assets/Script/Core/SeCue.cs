@@ -20,5 +20,7 @@ public enum SeCue
     PlayerDamaged,          //プレイヤーがダメージを受ける。
     StageClear,             //ステージクリア。
     GameOver,               //ゲームオーバー。
-    RewardSelect            //報酬を選ぶ。
+    RewardSelect,           //報酬を選ぶ。
+    UiConfirm,              //決定のUI音。
+    BossApper               //ボス登場のジングル。
 }
