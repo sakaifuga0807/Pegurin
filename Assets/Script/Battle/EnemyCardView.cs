@@ -1,5 +1,6 @@
 using System.Data;
 using UnityEngine;
+using UnityEngine.VFX;
 
 
 //敵一体ぶんの見た目。プレハブがなくても、敵のモデルを表示できる。
@@ -45,25 +46,28 @@ public class EnemyCardView:MonoBehaviour
     private void SpawnModel(EnemyData data)
     {
         Transform parent = modelRoot != null ? modelRoot : transform;
+        GameObject visual;
 
         if(data.ModelPrefab!=null)
         {
-            var model = Instantiate(data.ModelPrefab, parent);
-            model.transform.localPosition = Vector3.zero;
-            return;
+            visual = Instantiate(data.ModelPrefab, parent);
+            visual.transform.localPosition = Vector3.zero;
         }
-
-        if(data.Icon!=null)
+        else if(data.Icon!=null)
         {
-            var icon = new GameObject("Icon");
-            icon.transform.SetParent(parent, false);
-            icon.AddComponent<SpriteRenderer>().sprite = data.Icon;
-            return;
+            visual = new GameObject("Icon");
+            visual.transform.SetParent(parent, false);
+            visual.AddComponent<SpriteRenderer>().sprite = data.Icon;
+        }
+        else
+        {
+            //モデルも画像も未設定の場合仮の立方体を表示する。
+            visual = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            Destroy(visual.GetComponent<Collider>());
+            visual.transform.SetParent(parent, false);
         }
 
-        //モデルも画像も未設定:一の確認用に、仮の立方体を出す。
-        var placeholder = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        Destroy(placeholder.GetComponent<Collider>());
-        placeholder.transform.SetParent(parent, false);
+        //大きさの倍率を書ける。
+        visual.transform.localScale *= data.VisualScale;
     }
 }
