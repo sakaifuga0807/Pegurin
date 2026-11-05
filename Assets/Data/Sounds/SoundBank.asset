@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fcf5bcc302c52548af4645276d912a0, type: 3}
+  m_Name: SoundBank
+  m_EditorClassIdentifier: Assembly-CSharp::SoundBank
+  entries:
+  - cue: 0
+    effect: {fileID: 11400000, guid: 48aa8d8b598271c41b4c56fa1dc46ec9, type: 2}
+  - cue: 1
+    effect: {fileID: 11400000, guid: 2dad65b6bae41324ab4741d807969cb7, type: 2}
+  - cue: 2
+    effect: {fileID: 11400000, guid: 1bfaab2acc120ec449019e0d212de546, type: 2}
+  - cue: 3
+    effect: {fileID: 11400000, guid: 38d816cf427435c4188ad8abda767048, type: 2}
+  - cue: 4
+    effect: {fileID: 11400000, guid: fffeaeaffa153ae499c71cf0a5a02539, type: 2}
+  - cue: 5
+    effect: {fileID: 0}
+  - cue: 6
+    effect: {fileID: 11400000, guid: d26244388b76a304c9c365f5b426b168, type: 2}
+  - cue: 7
+    effect: {fileID: 11400000, guid: f60e6507ad1288740bc23f6d2c407c22, type: 2}
+  - cue: 8
+    effect: {fileID: 11400000, guid: 78f90247d0e61d043be93fef77eaf09a, type: 2}
+  - cue: 9
+    effect: {fileID: 11400000, guid: f6003065aa97a464ab78661f8574ef96, type: 2}
+  - cue: 10
+    effect: {fileID: 11400000, guid: ff3e7ddfb148b10448c6e046a34f0a8b, type: 2}
+  - cue: 11
+    effect: {fileID: 11400000, guid: 240a1e02cfa26354b9f27e8a36e20d88, type: 2}
+  - cue: 12
+    effect: {fileID: 11400000, guid: c91b40390f815e34f9c80e261baadb4f, type: 2}
+  - cue: 13
+    effect: {fileID: 11400000, guid: 7e452e1d1211ba44694b8acd52c19251, type: 2}
+  - cue: 14
+    effect: {fileID: 11400000, guid: 78f90247d0e61d043be93fef77eaf09a, type: 2}
+  - cue: 15
+    effect: {fileID: 11400000, guid: e41adbb67d7a3f04a807682940e6f886, type: 2}
+  - cue: 16
+    effect: {fileID: 11400000, guid: a9b226402fdf4ce4693dbeaeb56eb423, type: 2}
+  - cue: 19
+    effect: {fileID: 11400000, guid: 17f4d21748260a94da601644f06481c6, type: 2}
+  - cue: 18
+    effect: {fileID: 11400000, guid: a24a5802a1bc77741b5b3f1e62a7a19f, type: 2}
+  - cue: 19
+    effect: {fileID: 11400000, guid: 17f4d21748260a94da601644f06481c6, type: 2}
+  - cue: 17
+    effect: {fileID: 11400000, guid: 07a745a1e62a72b4ea033ff3bda66fd0, type: 2}
