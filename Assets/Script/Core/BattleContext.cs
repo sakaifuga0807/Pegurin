@@ -16,7 +16,6 @@ public class BattleContext : MonoBehaviour
     [field: SerializeField] public BattleStateMachine BattleStateMachine { get; private set; }
     [field: SerializeField] public Player Player { get; private set; }
     [field: SerializeField] public RunManager RunManager { get; private set; }
-    [field: SerializeField] public SoundPlayer SoundPlayer { get; private set; }
 
     private void Awake()
     {

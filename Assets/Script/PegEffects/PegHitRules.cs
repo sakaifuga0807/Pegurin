@@ -17,7 +17,7 @@ public static class PegHitRules
             damage = battle.PassiveManager.ModifyNormalPegDamage(damage);
         }
         battle.DamageCalculator.AddPegHit(damage, contexet.orb.Power);
-        SoundPlayer.PlayCue(SeCue.PegHitNormal);
+        SE.Play(SeCue.PegHitNormal);
         Debug.Log($"[Peg]通常+{damage}(威力{contexet.orb.Power})");
     }
 
@@ -29,7 +29,7 @@ public static class PegHitRules
 
         battle.DamageCalculator.AddPegHit(GameConstants.PegBaseDamage, context.orb.Power);
         battle.DamageCalculator.AddCritMultiplier();
-        SoundPlayer.PlayCue(SeCue.PegHitCrit);
+        SE.Play(SeCue.PegHitCrit);
         Debug.Log("[peg]クリティカル倍率+0.5");
     }
 
@@ -48,7 +48,7 @@ public static class PegHitRules
         {
             battle.PassiveManager.NotifyRefreshPegTriggered();
         }
-        SoundPlayer.PlayCue(SeCue.PegHitRefresh);
+        SE.Play(SeCue.PegHitRefresh);
         Debug.Log("[peg]リフレッシュ");
     }
 }

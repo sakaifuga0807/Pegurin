@@ -213,7 +213,6 @@ MonoBehaviour:
   <BattleStateMachine>k__BackingField: {fileID: 722819457}
   <Player>k__BackingField: {fileID: 192724482}
   <RunManager>k__BackingField: {fileID: 2089675872}
-  <SoundPlayer>k__BackingField: {fileID: 1658517736}
 --- !u!1 &504620746
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,7 +762,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3590b66f9af91874ea8cf1907612b0db, type: 3}
---- !u!1 &1658517735
+--- !u!1 &1564802231
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -771,41 +770,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1658517737}
-  - component: {fileID: 1658517736}
+  - component: {fileID: 1564802233}
+  - component: {fileID: 1564802232}
   m_Layer: 0
-  m_Name: SoundPlayer
+  m_Name: AudioDirector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1658517736
+--- !u!114 &1564802232
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1658517735}
+  m_GameObject: {fileID: 1564802231}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a4397b4332cce340ab97a577ccb3709, type: 3}
+  m_Script: {fileID: 11500000, guid: 46e2b151c2264ad4e92a221ea7ef3b62, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SoundPlayer
-  entries: []
+  m_EditorClassIdentifier: Assembly-CSharp::AudioDirector
+  bank: {fileID: 11400000, guid: 4c62bf8e1d4783a4ba5c1e3494b3c0c4, type: 2}
+  runManager: {fileID: 2089675872}
+  bgmEntries: []
+  fadeSeconds: 1
+  duckLevel: 0.25
+  duckSeconds: 0.3
   masterVolume: 1
-  voiceCount: 8
-  logPlays: 0
---- !u!4 &1658517737
+  seVolume: 1
+  bgmVolume: 1
+  seVoiceCount: 8
+  logPlays: 1
+--- !u!4 &1564802233
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1658517735}
+  m_GameObject: {fileID: 1564802231}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.19139, y: 0.24412, z: 0}
+  m_LocalPosition: {x: -0.34373, y: -2.3273, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -945,13 +951,13 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1564802233}
   - {fileID: 519420032}
   - {fileID: 757632730}
   - {fileID: 1054106187}
   - {fileID: 192724483}
   - {fileID: 722819458}
   - {fileID: 2089675873}
-  - {fileID: 1658517737}
   - {fileID: 2111475246}
   - {fileID: 504620749}
   - {fileID: 853797933}

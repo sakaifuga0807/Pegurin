@@ -42,7 +42,7 @@ public class EnemyTurnState : IBattleState
         //移動のSEは、全員分をまとめて1回だけ鳴らす。
         if(anyMoved)
         {
-            SoundPlayer.PlayCue(SeCue.EnemyMove);
+            SE.Play(SeCue.EnemyMove);
         }
 
         //行動パターンが進んだので、予告を計算し直すよう通知する。
@@ -51,7 +51,7 @@ public class EnemyTurnState : IBattleState
         //ダメージを受けるSE。
         if(totalDamage>0)
         {
-            SoundPlayer.PlayCue(SeCue.PlayerDamaged);
+            SE.Play(SeCue.PlayerDamaged);
         }
 
         //全員の処理が終わってから、攻撃の合計をまとめてHPから引く。
@@ -71,9 +71,9 @@ public class EnemyTurnState : IBattleState
     {
         switch (intent.Type)
         {
-            case EnemyIntentType.Attack:SoundPlayer.PlayCue(SeCue.EnemyAttack);break;
-            case EnemyIntentType.HeavyAttack:SoundPlayer.PlayCue(SeCue.EnemyHeavyAttack);break;
-            case EnemyIntentType.Summon: SoundPlayer.PlayCue(SeCue.EnemySummon); break;
+            case EnemyIntentType.Attack:SE.Play(SeCue.EnemyAttack);break;
+            case EnemyIntentType.HeavyAttack:SE.Play(SeCue.EnemyHeavyAttack);break;
+            case EnemyIntentType.Summon: SE.Play(SeCue.EnemySummon); break;
         }
     }
 }

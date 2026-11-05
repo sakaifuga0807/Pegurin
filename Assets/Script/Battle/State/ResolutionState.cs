@@ -23,12 +23,12 @@ public class ResolutionState : IBattleState
         //SE:ダメージが入った時。
         if(target!=null&&totalDamage>0)
         {
-           SoundPlayer.PlayCue(SeCue.DamageDealt);
+           SE.Play(SeCue.DamageDealt);
         }
         //SE:倒れたとき。
         if(target!=null&&target.IsDead)
         {
-            SoundPlayer.PlayCue(SeCue.EnemyDefeated);
+           SE.Play(SeCue.EnemyDefeated);
         }
 
         //ステージクリアなら敵のターンは行わない。
