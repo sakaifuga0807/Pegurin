@@ -294,6 +294,10 @@ public class AudioDirector : MonoBehaviour
     public void SetSeVolume(float value) { seVolume = Mathf.Clamp01(value); }
     public void SetBgmVolume(float value) { bgmVolume = Mathf.Clamp01(value); }
 
+    public float MasterVolume => masterVolume;
+    public float SeVolume => seVolume;
+    public float BgmVolume => bgmVolume;
+
     // ---- 確認用メニュー（再生中に、このコンポーネントの見出しを右クリックして実行する） ----
 
     [ContextMenu("テスト：音源が未設定のSEを一覧表示")]

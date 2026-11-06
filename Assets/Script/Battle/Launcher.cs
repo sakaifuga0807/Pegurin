@@ -45,7 +45,7 @@ public class Launcher : MonoBehaviour
         UpdatePreviewOrbPosition();
         DrawTrajectory();
 
-        if (canFire && Input.GetMouseButtonDown(0))
+        if (canFire &&!InputGuard.IsBlocked&& Input.GetMouseButtonDown(0))
         {
             FireOrb();
         }

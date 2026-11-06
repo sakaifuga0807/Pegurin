@@ -1111,6 +1111,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &940285143
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 940285145}
+  - component: {fileID: 940285144}
+  m_Layer: 0
+  m_Name: SoundTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &940285144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940285143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3a9486eae938ad45b9d217df3349c6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundTest
+  director: {fileID: 1564802232}
+  bank: {fileID: 11400000, guid: 4c62bf8e1d4783a4ba5c1e3494b3c0c4, type: 2}
+  openOnStart: 0
+  zoom: 1.3
+--- !u!4 &940285145
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940285143}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.62852, y: 2.68845, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1054106185
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,7 +1447,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1658517735
 --- !u!1 &1564802231
 GameObject:
   m_ObjectHideFlags: 0
@@ -1431,12 +1478,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioDirector
   bank: {fileID: 11400000, guid: 4c62bf8e1d4783a4ba5c1e3494b3c0c4, type: 2}
   runManager: {fileID: 2089675872}
-  bgmEntries: []
+  bgmEntries:
+  - cue: 0
+    clip: {fileID: 8300000, guid: 0b46dcd8ce56d51408c4f2aaff152384, type: 3}
+    volume: 0.507
+  - cue: 1
+    clip: {fileID: 8300000, guid: a759d52ed40de1146a3e73c372a52e06, type: 3}
+    volume: 0.533
+  - cue: 2
+    clip: {fileID: 0}
+    volume: 0
   fadeSeconds: 1
   duckLevel: 0.25
   duckSeconds: 0.3
   masterVolume: 1
-  seVolume: 1
+  seVolume: 0.5
   bgmVolume: 1
   seVoiceCount: 8
   logPlays: 1
@@ -1450,6 +1506,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.34373, y: -2.3273, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1658517735
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1658517736}
+  m_Layer: 0
+  m_Name: 
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1658517736
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658517735}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1556,6 +1643,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1936374597}
   - component: {fileID: 1936374596}
+  - component: {fileID: 1936374598}
   m_Layer: 0
   m_Name: character_Knight
   m_TagString: Untagged
@@ -1637,6 +1725,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1936374598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1936374595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bbc6093059f1d94ba13c159c021feff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerView
+  player: {fileID: 192724482}
+  stateMachine: {fileID: 722819457}
+  runManager: {fileID: 2089675872}
+  animator: {fileID: 0}
+  idleState: idle
+  attackState: 
+  hitState: down
+  dieState: die
+  victoryState: jump
+  returnToIdleSeconds: 0.5
+  crossFadeSeconds: 0.05
+  logStates: 1
 --- !u!1 &2036484296
 GameObject:
   m_ObjectHideFlags: 0
@@ -1862,6 +1974,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1658517736}
   - {fileID: 1564802233}
   - {fileID: 519420032}
   - {fileID: 757632730}
@@ -1883,3 +1996,4 @@ SceneRoots:
   - {fileID: 1201148532}
   - {fileID: 1543967558}
   - {fileID: 1936374597}
+  - {fileID: 940285145}

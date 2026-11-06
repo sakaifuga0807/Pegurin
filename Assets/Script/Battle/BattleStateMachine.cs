@@ -10,6 +10,10 @@ public class BattleStateMachine : MonoBehaviour
     //現在のステート。外部からは読み取り用。
     public IBattleState CurrentState { get; private set; }
 
+    //通知を受けるイベント。
+    public event Action OnOrbLaunchedEvent;
+    public event Action OnOrbLandeEvent;
+
     //戦闘開始。RunManagerがステージ開始のたびに呼ぶ。
     public void StartBattle()
     {
@@ -35,6 +39,9 @@ public class BattleStateMachine : MonoBehaviour
 
         BattleContext.Current.DeckManager.DiscardCurrentOrb();
         ChangeState(new OrbInFlightState());
+
+        //イベントを発火する。
+        OnOrbLandeEvent?.Invoke();
     }
 
     //このターンの弾が落ちたとき、玉が全て落ちたかの判定。
@@ -54,7 +61,7 @@ public class BattleStateMachine : MonoBehaviour
         CurrentState = null;
     }
 
-    //消してねー
+    //テスト用。
     [ContextMenu("テスト：撃たずに1ターン進める")]
     private void TestSkipTurn()
     {
