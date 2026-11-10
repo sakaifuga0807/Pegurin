@@ -6,7 +6,8 @@ using System.Collections;
 public class Peg : MonoBehaviour
 {
     [Header("消失アニメーション設定")]
-    [SerializeField] private float shrinkDuration = 0.2f;
+    [SerializeField] private float shrinkDuration = 3.0f;
+    [SerializeField] private AnimationCurve scaleCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
 
     [Header("エフェクト定義 (ScriptableObject)")]
     [SerializeField] private PegEffect pegEffect;
@@ -74,33 +75,45 @@ public class Peg : MonoBehaviour
     private IEnumerator ShrinkAndDisableRoutine()
     {
         float elapsedTime = 0f;
-        Vector3 startScale = transform.localScale;
+        Vector3 startScale = initialScale;
         Color startColor = spriteRenderer != null ? spriteRenderer.color : Color.white;
 
         while (elapsedTime < shrinkDuration)
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / shrinkDuration;
-            transform.localScale = Vector3.Lerp(startScale, Vector3.zero, t);
+
+            float scaleMultiplier;
+            if (t < 0.25f)
+            {
+                scaleMultiplier = Mathf.Lerp(1.0f, 1.5f, t / 0.25f);
+            }
+            else
+            {
+                float shrinkT = (t - 0.25f) / 0.75f;
+                scaleMultiplier = Mathf.Lerp(1.5f, 0.0f, shrinkT * shrinkT); 
+            }
+
+            transform.localScale = startScale * scaleMultiplier;
+
             if (spriteRenderer != null)
             {
                 Color c = startColor;
-                c.a = Mathf.Lerp(startColor.a, 0f, t);
+                c.a = Mathf.Lerp(startColor.a, 0f, t * t);
                 spriteRenderer.color = c;
             }
             yield return null;
         }
+
         gameObject.SetActive(false);
     }
 
-    // 外部からエフェクトと色を動的に設定するメソッド
     public void SetPegEffect(PegEffect newEffect, Color pegColor)
     {
         pegEffect = newEffect;
-        initialColor = pegColor; // 変数にしっかり保持する
+        initialColor = pegColor; 
         hasBeenDepleted = false;
 
-        // 確実に即座にスプライトの色を反映させる
         ApplyColor(initialColor);
     }
 
