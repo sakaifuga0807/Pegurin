@@ -22,8 +22,25 @@ public class PegBoard : MonoBehaviour
         Peg[] foundPegs = GetComponentsInChildren<Peg>(true);
         allPegs = new List<Peg>(foundPegs);
 
+        // 全ペグに "Peg" タグを自動適用
+        SetupPegTags();
+
         // ボードが読み込まれたときにランダムでエフェクトを割り振る
         AssignRandomEffectsToAllPegs();
+    }
+
+    /// <summary>
+    /// 管理下のペグすべてに "Peg" タグを自動設定する
+    /// </summary>
+    private void SetupPegTags()
+    {
+        foreach (var peg in allPegs)
+        {
+            if (peg != null)
+            {
+                peg.gameObject.tag = "Peg";
+            }
+        }
     }
 
     /// <summary>
