@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-//画面の部品（確認用パネル、UIのボタン）の上にマウスがあるときは、ゲームの操作（発射など）を止めるための印。
-//ゲームの入力を読む側は、InputGuard.IsBlocked が true のときは、入力を無視する。
+//画面の部品（確認用パネル、UIのボタンなど）の上にマウスがあるときは、ゲームの操作（発射など）を止めるための印。
+//押せないUI（背景の画像など）では、止めない。
 public static class InputGuard
 {
     private static readonly HashSet<object> blockers = new HashSet<object>();
+    private static readonly List<RaycastResult> results = new List<RaycastResult>();
 
     //確認用パネルなどが、「マウスが上にある」ことを知らせる。
     public static void SetBlocked(object owner, bool blocked)
@@ -15,15 +17,35 @@ public static class InputGuard
         else blockers.Remove(owner);
     }
 
-    //true のあいだは、ゲームの操作を止める。
-    public static bool IsBlocked
+    //true のあいだは、ゲームの操作を止める（クリックしたときに調べる）。
+    public static bool IsBlocked => blockers.Count > 0 || PointerOverInteractiveUi() != null;
+
+    //止めているものの名前（ログ用）。
+    public static string DescribeBlocker()
     {
-        get
+        if (blockers.Count > 0) return "確認用パネル（サウンドテストなど）";
+        var ui = PointerOverInteractiveUi();
+        if (ui != null) return $"UIのボタンなど「{ui.name}」";
+        return "なし";
+    }
+
+    //マウスの下にある、押せるUI（ボタン、スライダーなど）を探す。
+    private static GameObject PointerOverInteractiveUi()
+    {
+        var es = EventSystem.current;
+        if (es == null) return null;
+
+        var data = new PointerEventData(es) { position = Input.mousePosition };
+        results.Clear();
+        es.RaycastAll(data, results);
+
+        foreach (var hit in results)
         {
-            if (blockers.Count > 0) return true;
-            //③のUI（Canvas）のボタンの上でも、止める。
-            return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+            if (hit.gameObject == null) continue;
+            var selectable = hit.gameObject.GetComponentInParent<Selectable>();
+            if (selectable != null && selectable.IsInteractable()) return selectable.gameObject;
         }
+        return null;
     }
 
     //再生を始めるたびに、状態をリセットする。
@@ -31,5 +53,6 @@ public static class InputGuard
     private static void ResetState()
     {
         blockers.Clear();
+        results.Clear();
     }
 }

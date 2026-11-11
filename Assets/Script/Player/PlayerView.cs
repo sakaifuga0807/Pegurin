@@ -58,7 +58,7 @@ public class PlayerView:MonoBehaviour
         }
 
         if (player != null) { player.OnHpChanged += OnHpChanged;player.OnDied += OnDied; }
-        if (stateMachine != null) stateMachine.OnOrbLandeEvent += OnLaunched;
+        if (stateMachine != null) stateMachine.Launched += OnLaunched;
         if(runManager!=null)
         {
             runManager.OnRunStarted += OnReset;
@@ -71,7 +71,7 @@ public class PlayerView:MonoBehaviour
     private void OnDestroy()
     {
         if (player!= null) { player.OnHpChanged -= OnHpChanged;player.OnDied -= OnDied; }
-        if (stateMachine != null) stateMachine.OnOrbLandeEvent -= OnLaunched;
+        if (stateMachine != null) stateMachine.Launched -= OnLaunched;
         if(runManager!=null)
         {
             runManager.OnRunStarted -= OnReset;

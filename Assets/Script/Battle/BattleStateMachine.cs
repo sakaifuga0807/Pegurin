@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 //戦闘ターン進行を管理するステートマシン。
@@ -10,9 +11,16 @@ public class BattleStateMachine : MonoBehaviour
     //現在のステート。外部からは読み取り用。
     public IBattleState CurrentState { get; private set; }
 
-    //通知を受けるイベント。
-    public event Action OnOrbLaunchedEvent;
-    public event Action OnOrbLandeEvent;
+    //今玉を撃ってい良い状態か。
+    public bool CanLaunch => CurrentState is PlayerInputState;
+
+    //見た目の受け口。
+    public event Action Launched;   //玉を発射したとき。
+    public event Action Landed;     //玉が全部落ちたとき。
+
+    //全部の玉が落ちたら、OrbTrackerが知らせてくれる。
+    private void OnEnable() { OrbTracker.AllLanded += OnOrbLanded; }
+    private void OnDisable() { OrbTracker.AllLanded -= OnOrbLanded; }
 
     //戦闘開始。RunManagerがステージ開始のたびに呼ぶ。
     public void StartBattle()
@@ -32,27 +40,20 @@ public class BattleStateMachine : MonoBehaviour
     //弾を発射したとき、発射した時点で、引いていたオーブを捨て札へ送る。
     public void OnOrbLaunched()
     {
-        if(!(CurrentState is PlayerInputState))
-        {
-            return;
-        }
+        if (!CanLaunch) return;
 
         BattleContext.Current.DeckManager.DiscardCurrentOrb();
         ChangeState(new OrbInFlightState());
-
-        //イベントを発火する。
-        OnOrbLandeEvent?.Invoke();
+        Launched?.Invoke();
     }
 
     //このターンの弾が落ちたとき、玉が全て落ちたかの判定。
     public void OnOrbLanded()
     {
-        if(!(CurrentState is OrbInFlightState))
-        {
-            return;
-        }
+        if(!(CurrentState is OrbInFlightState)) return;
 
         ChangeState(new ResolutionState());
+        Landed?.Invoke();
     }
 
     //戦闘を止める。
