@@ -21,6 +21,8 @@ public class Orb : MonoBehaviour
     [SerializeField] private OrbData currentOrbData;      //インスペクターから入れられるようにする。
     private Rigidbody2D rb;              // 物理演算用コンポーネント
     private float defaultGravityScale = 1f;
+    private Vector3 baseScale = Vector3.one;    //プレハブの元の大きさ。
+    private float baseGravityScale = 1f;        //プレハブの元の重力。重力比率は、これにかける。　
 
     private List<GameObject> trailNodes = new List<GameObject>();
     private Queue<Vector3> positionHistory = new Queue<Vector3>();
@@ -29,7 +31,9 @@ public class Orb : MonoBehaviour
     // 初期化処理 (Awake / Start)
     void Awake()
     {
+        baseScale = transform.localScale;
         rb = GetComponent<Rigidbody2D>();
+        baseGravityScale = rb.gravityScale;
 
         // 物理挙動の安定化設定
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
@@ -52,14 +56,17 @@ public class Orb : MonoBehaviour
     //当たったペグのダメージ計算に使う威力。
     public int Power => currentOrbData != null ? currentOrbData.power : 0;
 
+    //速度の上限。
+    public float MaxSpeed=>maxSpeed;
+
     public void SetupOrb(OrbData data)
     {
         currentOrbData = data;
         if (currentOrbData == null) return;
 
         // サイズと重力の比率適用
-        transform.localScale = Vector3.one * currentOrbData.sizeRatio;
-        defaultGravityScale = 1f * currentOrbData.gravityRatio;
+        transform.localScale = baseScale * currentOrbData.sizeRatio;
+        defaultGravityScale = baseGravityScale * currentOrbData.gravityRatio;
         rb.gravityScale = defaultGravityScale;
     }
 
