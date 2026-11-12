@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4bded259b1f5de4489b4080546b60cd, type: 3}
   m_Name: Launch
   m_EditorClassIdentifier: Assembly-CSharp::SoundEffect
-  clips: []
+  kind: 0
+  clips:
+  - {fileID: 8300000, guid: 28d8c36e8a44608468c6939a1ef192fb, type: 3}
   volume: 1
   pitchMin: 0.95
   pitchMax: 1.05
+  cooldown: 0.03

@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4bded259b1f5de4489b4080546b60cd, type: 3}
   m_Name: Boss
   m_EditorClassIdentifier: Assembly-CSharp::SoundEffect
+  kind: 0
   clips:
   - {fileID: 8300000, guid: 9b27f40ea3525d74d9f53e7dabe7eca4, type: 3}
-  volume: 1
+  volume: 0.559
   pitchMin: 0.95
   pitchMax: 1.05
+  cooldown: 0.03
