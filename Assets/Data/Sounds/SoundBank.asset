@@ -47,11 +47,9 @@ MonoBehaviour:
     effect: {fileID: 11400000, guid: e41adbb67d7a3f04a807682940e6f886, type: 2}
   - cue: 16
     effect: {fileID: 11400000, guid: a9b226402fdf4ce4693dbeaeb56eb423, type: 2}
-  - cue: 19
-    effect: {fileID: 11400000, guid: 17f4d21748260a94da601644f06481c6, type: 2}
+  - cue: 17
+    effect: {fileID: 11400000, guid: 07a745a1e62a72b4ea033ff3bda66fd0, type: 2}
   - cue: 18
     effect: {fileID: 11400000, guid: a24a5802a1bc77741b5b3f1e62a7a19f, type: 2}
   - cue: 19
     effect: {fileID: 11400000, guid: 17f4d21748260a94da601644f06481c6, type: 2}
-  - cue: 17
-    effect: {fileID: 11400000, guid: 07a745a1e62a72b4ea033ff3bda66fd0, type: 2}
