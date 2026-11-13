@@ -157,6 +157,7 @@ public class Launcher : MonoBehaviour
 
     private void FireOrb(OrbData data)
     {
+        OrbData orbData = BattleContext.Current.DeckManager.CurrentOrb; //わ
         GameObject prefab = PrefabFor(data);
         if(prefab==null||firePoint==null)
         {
@@ -168,6 +169,10 @@ public class Launcher : MonoBehaviour
 
         //本物のオーブを生成する。
         GameObject orbObj = Instantiate(prefab, firePoint.position, firePoint.rotation);
+
+        OrbEffectApplier.Apply(orbObj, orbData);
+        orbObj.GetComponent<Orb>().SetupOrb(orbData);
+
         SetupOrb(orbObj, data);
         OrbTracker.Register(orbObj);
         launchTime = Time.time;

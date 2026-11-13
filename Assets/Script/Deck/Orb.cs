@@ -15,17 +15,20 @@ public class Orb : MonoBehaviour
 
     [Header("テール（軌跡）設定")]
     [SerializeField] private GameObject trailNodePrefab;     // 軌跡に残すプレハブ
-    [SerializeField] private int trailCount = 30;              // 軌跡の長さ（数）
+    [SerializeField] private int trailCount = 30;               // 軌跡の長さ（数）
     [SerializeField] private float recordIntervalFrames = 0.01f; // 軌跡を記録する頻度
 
-    [SerializeField] private OrbData currentOrbData;      //インスペクターから入れられるようにする。
+    private Vector3[] positionHistory;
+    private int historyHead = 0;   // 次に書く位置
+    private int historyCount = 0;  // 現在記録されているデータ数
+
+    [SerializeField] private OrbData currentOrbData;      // インスペクターから入れられるようにする。
     private Rigidbody2D rb;              // 物理演算用コンポーネント
     private float defaultGravityScale = 1f;
-    private Vector3 baseScale = Vector3.one;    //プレハブの元の大きさ。
-    private float baseGravityScale = 1f;        //プレハブの元の重力。重力比率は、これにかける。　
+    private Vector3 baseScale = Vector3.one;    // プレハブの元の大きさ。
+    private float baseGravityScale = 1f;        // プレハブの元の重力。重力比率は、これにかける。
 
     private List<GameObject> trailNodes = new List<GameObject>();
-    private Queue<Vector3> positionHistory = new Queue<Vector3>();
     private int frameCounter = 0;
 
     // 初期化処理 (Awake / Start)
@@ -53,11 +56,11 @@ public class Orb : MonoBehaviour
         }
     }
 
-    //当たったペグのダメージ計算に使う威力。
+    // 当たったペグのダメージ計算に使う威力。
     public int Power => currentOrbData != null ? currentOrbData.power : 0;
 
-    //速度の上限。
-    public float MaxSpeed=>maxSpeed;
+    // 速度の上限。
+    public float MaxSpeed => maxSpeed;
 
     public void SetupOrb(OrbData data)
     {
@@ -131,6 +134,8 @@ public class Orb : MonoBehaviour
     {
         if (trailNodePrefab == null) return;
 
+        positionHistory = new Vector3[trailCount];
+
         SpriteRenderer orbSr = GetComponent<SpriteRenderer>();
         string orbSortingLayer = (orbSr != null) ? orbSr.sortingLayerName : "Default";
         int orbSortingOrder = (orbSr != null) ? orbSr.sortingOrder : 0;
@@ -164,16 +169,18 @@ public class Orb : MonoBehaviour
         if (frameCounter >= recordIntervalFrames)
         {
             frameCounter = 0;
-            positionHistory.Enqueue(transform.position);
-            while (positionHistory.Count > trailCount) positionHistory.Dequeue();
+
+            positionHistory[historyHead] = transform.position;
+            historyHead = (historyHead + 1) % trailCount;
+            if (historyCount < trailCount) historyCount++;
         }
 
-        Vector3[] historyArray = positionHistory.ToArray();
         for (int i = 0; i < trailNodes.Count; i++)
         {
-            if (i < historyArray.Length)
+            if (i < historyCount)
             {
-                trailNodes[i].transform.position = historyArray[historyArray.Length - 1 - i];
+                int index = (historyHead - 1 - i + trailCount) % trailCount;
+                trailNodes[i].transform.position = positionHistory[index];
                 trailNodes[i].SetActive(true);
             }
             else
@@ -185,7 +192,8 @@ public class Orb : MonoBehaviour
 
     public void ResetTrailPositions()
     {
-        positionHistory.Clear();
+        historyHead = 0;
+        historyCount = 0;
         frameCounter = 0;
         foreach (var node in trailNodes)
         {
