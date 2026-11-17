@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IBattleState
 {
-    void Enter(BattleStateMachine stateMachene);
+    void Enter(BattleStateMachine stateMachine);
 }
 

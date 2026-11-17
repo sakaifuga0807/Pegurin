@@ -212,6 +212,7 @@ public class AudioDirector : MonoBehaviour
             case RunPhase.Battle:
             case RunPhase.Reward:
             case RunPhase.Map:
+            case RunPhase.Transition:
                 HandleStageStarted(runManager.StageIndex, runManager.CurrentStage);
                 break;
         }
