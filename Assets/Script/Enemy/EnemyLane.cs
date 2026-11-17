@@ -17,11 +17,11 @@ public class EnemyLane
     public event Action OnIntentChanged;
 
     //敵が存在しているか。
-    public bool IsEmpty 
+    public bool IsEmpty
     {
         get
         {
-            for(int cell=1;cell<=GameConstants.LaneCellCount;cell++)
+            for (int cell = 1; cell <= GameConstants.LaneCellCount; cell++)
             {
                 if (cells[cell] != null) return false;
             }
@@ -33,9 +33,9 @@ public class EnemyLane
     public void Setup(IEnumerable<EnemyData> enemyDatas)
     {
         ClearInternal();
-        foreach(var data in enemyDatas)
+        foreach (var data in enemyDatas)
         {
-            if(!TryPlace(new Enemy(data,data.StartCell)))
+            if (!TryPlace(new Enemy(data, data.StartCell)))
             {
                 UnityEngine.Debug.LogError($"{data.EnemyName}の初期マス{data.StartCell}が他の敵と重なっています。");
             }
@@ -44,10 +44,10 @@ public class EnemyLane
     }
 
     //召喚処理。
-    public Enemy Spawn(EnemyData data,int cell)
+    public Enemy Spawn(EnemyData data, int cell)
     {
         var enemy = new Enemy(data, cell);
-        if(!TryPlace(enemy)) return null;
+        if (!TryPlace(enemy)) return null;
         OnChanged?.Invoke();
         return enemy;
     }
@@ -67,7 +67,7 @@ public class EnemyLane
     //一番奥の空きマス。
     public int FindBackmostEmptyCell()
     {
-        for(int cell=GameConstants.LaneCellCount;cell>=1;cell--)
+        for (int cell = GameConstants.LaneCellCount; cell >= 1; cell--)
         {
             if (cells[cell] == null) return cell;
         }
@@ -78,7 +78,7 @@ public class EnemyLane
     public List<Enemy> GetEnemiesFrontToBack()
     {
         var list = new List<Enemy>();
-        for(int cell=1; cell<=GameConstants.LaneCellCount;cell++)
+        for (int cell = 1; cell <= GameConstants.LaneCellCount; cell++)
         {
             if (cells[cell] != null) list.Add(cells[cell]);
         }
@@ -96,7 +96,7 @@ public class EnemyLane
     //指定した種類の敵がレーン上に存在するか。
     public bool Contains(EnemyData data)
     {
-        for(int cell=1;cell<=GameConstants.LaneCellCount;cell++)
+        for (int cell = 1; cell <= GameConstants.LaneCellCount; cell++)
         {
             if (cells[cell] != null && cells[cell].Data == data) return true;
         }
@@ -116,7 +116,7 @@ public class EnemyLane
         int steps = enemy.MaxMoveSteps;
         int moved = 0;
 
-        while(moved<steps&&IsCellEmpty(enemy.CurrentCell-1))
+        while (moved < steps && IsCellEmpty(enemy.CurrentCell - 1))
         {
             MoveTo(enemy, enemy.CurrentCell - 1);
             moved++;
@@ -134,22 +134,27 @@ public class EnemyLane
     public Enemy ApplyDamageToFront(int damage)
     {
         Enemy front = null;
-        for(int cell=1;cell<=GameConstants.LaneCellCount;cell++)
+        for (int cell = 1; cell <= GameConstants.LaneCellCount; cell++)
         {
-            if (cells[cell] != null) { front = cells[cell];break; }
+            if (cells[cell] != null) { front = cells[cell]; break; }
         }
         if (front == null) return null;
 
         front.TakeDamage(damage);
-        RemoveDeadEnemies();
         OnChanged?.Invoke();
         return front;
+    }
+
+    //HPが0になった敵を、マスから外す。
+    public void RemoveDefeated()
+    {
+        RemoveDeadEnemies();
     }
 
     //敵全体にダメージを与える。*爆発。
     public void ApplyDamageToAll(int damage)
     {
-        foreach(var enemy in GetEnemiesFrontToBack())
+        foreach (var enemy in GetEnemiesFrontToBack())
         {
             enemy.TakeDamage(damage);
         }
@@ -172,7 +177,7 @@ public class EnemyLane
         return true;
     }
 
-    private void MoveTo(Enemy enemy,int newCell)
+    private void MoveTo(Enemy enemy, int newCell)
     {
         cells[enemy.CurrentCell] = null;
         cells[newCell] = enemy;
@@ -188,7 +193,7 @@ public class EnemyLane
     private void RemoveDeadEnemies()
     {
         bool removed = false;
-        for(int cell=1;cell<=GameConstants.LaneCellCount; cell++)
+        for (int cell = 1; cell <= GameConstants.LaneCellCount; cell++)
         {
             if (cells[cell] != null && cells[cell].IsDead)
             {

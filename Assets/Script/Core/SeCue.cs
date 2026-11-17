@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public enum SeCue
-{ 
+{
     Launch,                 //発射。
     PegHitNormal,           //通常ペグ命中。
     PegHitCrit,             //クリティカルペグ命中。
@@ -22,5 +22,5 @@ public enum SeCue
     GameOver,               //ゲームオーバー。
     RewardSelect,           //報酬を選ぶ。
     UiConfirm,              //決定のUI音。
-    BossApper               //ボス登場のジングル。
+    BossAppear               //ボス登場のジングル。
 }

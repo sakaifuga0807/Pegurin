@@ -1,13 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
 
 //ペグのレイアウトの種類。
-public enum PegLayoutType { VShape,Diamond,Grid}
+public enum PegLayoutType { VShape, Diamond, Grid }
 
 //ランの進行段階。
-public enum RunPhase { Title,Battle,Reward,Map,Cleared,GameOver}
+public enum RunPhase { Title, Battle, Reward, Map, Transition, Cleared, GameOver }
 
 //ステージ一つ分の構成。
 [Serializable]
@@ -21,7 +22,7 @@ public class StageConfig
 }
 
 //ラン全体の進行管理。
-public class RunManager:MonoBehaviour
+public class RunManager : MonoBehaviour
 {
     [Header("ステージ構成")]
     [SerializeField] private List<StageConfig> stages = new List<StageConfig>();
@@ -62,7 +63,7 @@ public class RunManager:MonoBehaviour
 
     private void OnDestroy()
     {
-        if(BattleContext.Current!=null&&BattleContext.Current.Player!=null)
+        if (BattleContext.Current != null && BattleContext.Current.Player != null)
         {
             BattleContext.Current.Player.OnDied -= HandlePlayerDied;
         }
@@ -82,7 +83,7 @@ public class RunManager:MonoBehaviour
         //タイトル以外では開始しない。
         if (Phase != RunPhase.Title) return;
 
-        if(stages.Count==0)
+        if (stages.Count == 0)
         {
             Debug.LogError("RunManagerのStagesが空です。");
             return;
@@ -90,7 +91,7 @@ public class RunManager:MonoBehaviour
         var context = BattleContext.Current;
         StageIndex = 0;
         context.Player.ResetForRun();
-        if(context.PassiveManager!=null)
+        if (context.PassiveManager != null)
         {
             context.PassiveManager.ResetForRun();
         }
@@ -100,26 +101,52 @@ public class RunManager:MonoBehaviour
         StartStage();
     }
 
+    //今やり直し・タイトルへ戻るができるか。
+    public bool CanAbort => Phase != RunPhase.Title;
+
     //ゲームクリア・オーバー画面のもう一度から呼ぶ。
     public void RestartRun()
     {
-        if (Phase != RunPhase.Cleared && Phase != RunPhase.GameOver) return;
+        if (!CanAbort) return;
+
+        SE.Play(SeCue.UiConfirm);
+        AbortBattle();
+        GameSpeed.SetPaused(false);     //ポーズ中に押されたときのため。
 
         Phase = RunPhase.Title;
-        SE.Play(SeCue.UiConfirm);
         BeginRun();
     }
 
-    //ゲームクリア・オーバー画面のタイトルへから呼ぶ。
+    //ゲームクリア・オーバー画面のタイトル、ポーズ画面の法規から呼ぶ。どのフェーズでも動く。
     public void ReturnToTitle()
     {
-        if (Phase != RunPhase.Cleared && Phase != RunPhase.GameOver) return;
+        if (!CanAbort) return;
 
-        stateMachine.Stop();
-        BattleContext.Current.EnemyLane.Clear();
+        SE.Play(SeCue.UiConfirm);
+        AbortBattle();
+        GameSpeed.ResetAll();       //タイトル時は等倍・ポーズなしに戻す。
+
         Phase = RunPhase.Title;
         Debug.Log("タイトルへ戻りました");
         OnReturnedToTitle?.Invoke();
+    }
+
+    //進行中のものを全部止める。
+    private void AbortBattle()
+    {
+        //演出の待ちを全部止める。
+        var director = BattleDirector.Existing;
+        if (director != null) director.CancelAll();
+
+        OrbTracker.DestroyAll();
+        stateMachine.Stop();
+        BattleContext.Current.EnemyLane.Clear();
+
+        //報酬の選択の途中だった文を捨てる。
+        currentOrbOptions.Clear();
+        currentPassiveOptions.Clear();
+        orbChosen = false;
+        passiveChosen = false;
     }
 
     //ステージ開始。
@@ -128,24 +155,33 @@ public class RunManager:MonoBehaviour
         var context = BattleContext.Current;
         var stage = CurrentStage;
 
-        Phase = RunPhase.Battle;
+        Phase = RunPhase.Transition;
         context.EnemyLane.Setup(stage.enemies);
         context.DeckManager.InitializeDeck();
 
         Debug.Log($"ステージ{StageIndex + 1}開始:{stage.stageName}(レイアウト：{stage.layout})");
 
         //ボスのステージの開始は、登場のジングルを鳴らす。
-        if (stage.isBoss) SE.Play(SeCue.BossApper);
-
+        if (stage.isBoss) SE.Play(SeCue.BossAppear);
         OnStageStarted?.Invoke(StageIndex, stage);
 
+        BattleDirector.Instance.Run(StageIntroRoutine(stage));
+    }
+
+    private IEnumerator StageIntroRoutine(StageConfig stage)
+    {
+        var director = BattleDirector.Instance;
+        if (stage.isBoss) yield return director.Play(Beat.BossAppear, new StageBeat(StageIndex, stage));
+        yield return director.Play(Beat.StageIntro, new StageBeat(StageIndex, stage));
+
+        Phase = RunPhase.Battle;
         stateMachine.StartBattle();
     }
 
-    //クリア判定。
+    //クリア判定。クリアなら、クリア演出から報酬までの進行を初めて、Trueを返す。
     public bool TryCompleteStage()
     {
-        if(Phase!=RunPhase.Battle)
+        if (Phase != RunPhase.Battle)
         {
             return false;
         }
@@ -156,7 +192,7 @@ public class RunManager:MonoBehaviour
 
         //ボスステージ。ボスだけ倒すとクリア判定。
         bool cleared;
-        if(stage.isBoss&&stage.bossData!=null)
+        if (stage.isBoss && stage.bossData != null)
         {
             cleared = !lane.Contains(stage.bossData);
         }
@@ -176,32 +212,45 @@ public class RunManager:MonoBehaviour
         SE.Play(SeCue.StageClear);
 
         //ボス撃破。残りの敵を消す。
-        if(stage.isBoss)
+        if (stage.isBoss)
         {
             lane.Clear();
         }
 
-        //最終ステージクリアで、ゲームクリア。
+        //遷移中にする。
+        Phase = RunPhase.Transition;
+        BattleDirector.Instance.Run(CompleteStageRoutine(stage));
+        return true;
+    }
+
+    private IEnumerator CompleteStageRoutine(StageConfig stage)
+    {
+        var director = BattleDirector.Instance;
+        var context = BattleContext.Current;
+
+        //クリア演出。
+        yield return director.Play(Beat.StageClear, new StageBeat(StageIndex, stage));
+
+        //最終ステージ、または最後のステージ→ゲームクリア。
         if (stage.isBoss || StageIndex + 1 >= stages.Count)
         {
             Phase = RunPhase.Cleared;
             Debug.Log("ゲームクリア");
             OnRunCleared?.Invoke();
-            return true;
+            yield break;
         }
 
-        BeginReward(context);
-        return true;
-    }
-
-    //報酬。
-    private void BeginReward(BattleContext context)
-    {
-        //HPの回復をする。
+        //HP回復と、その表示。
         int before = context.Player.CurrentHp;
         context.Player.HealOnStageClear();
         int healed = context.Player.CurrentHp - before;
+        yield return director.Play(Beat.HealShown, new HealBeat(healed, context.Player.CurrentHp, context.Player.MaxHp));
 
+        BeginReward(context, healed);
+    }
+    //報酬。
+    private void BeginReward(BattleContext context, int healed)
+    {
         //報酬の候補。オーブは必ず並ぶ。
         currentOrbOptions = new List<OrbData>(rewardOrbOptions);
         currentPassiveOptions = context.PassiveManager != null
@@ -221,7 +270,7 @@ public class RunManager:MonoBehaviour
     //報酬画面でオーブを選んだ時に呼ぶ。
     public void SelectRewardOrb(OrbData orb)
     {
-        if(Phase!=RunPhase.Reward||orbChosen||!currentOrbOptions.Contains(orb))
+        if (Phase != RunPhase.Reward || orbChosen || !currentOrbOptions.Contains(orb))
         {
             return;
         }
@@ -236,7 +285,7 @@ public class RunManager:MonoBehaviour
     //報酬画面でパッシブを選んだ時に呼ぶ。
     public void SelectRewardPassive(PassiveEffect passive)
     {
-        if(Phase!=RunPhase.Reward||passiveChosen||!currentPassiveOptions.Contains(passive))
+        if (Phase != RunPhase.Reward || passiveChosen || !currentPassiveOptions.Contains(passive))
         {
             return;
         }
@@ -254,7 +303,7 @@ public class RunManager:MonoBehaviour
     {
         bool orbDone = orbChosen || currentOrbOptions.Count == 0;
         bool passiveDone = passiveChosen || currentPassiveOptions.Count == 0;
-        if(orbDone&&passiveDone)
+        if (orbDone && passiveDone)
         {
             GoToNextStage();
         }
@@ -263,8 +312,15 @@ public class RunManager:MonoBehaviour
     //次のステージへ遷移処理。
     private void GoToNextStage()
     {
-        Phase = RunPhase.Map;
-        //TODO:マップの演出を入れる。
+        Phase = RunPhase.Transition;
+        BattleDirector.Instance.Run(NextStageRoutine());
+    }
+
+    private IEnumerator NextStageRoutine()
+    {
+        //マップ演出。今は待ち時間だけ。
+        yield return BattleDirector.Instance.Play(Beat.MapTransition, new StageBeat(StageIndex, CurrentStage));
+
         StageIndex++;
         StartStage();
     }
@@ -272,13 +328,20 @@ public class RunManager:MonoBehaviour
     //ゲームオーバー。
     private void HandlePlayerDied()
     {
-        if(Phase==RunPhase.GameOver)
+        if (Phase == RunPhase.GameOver || Phase == RunPhase.Title)
         {
             return;
         }
 
         Phase = RunPhase.GameOver;
-        SE.Play(SeCue.GameOver);//SE:ゲームオーバー。
+        BattleDirector.Instance.Run(GameOverRoutine());
+    }
+
+    private IEnumerator GameOverRoutine()
+    {
+        SE.Play(SeCue.GameOver);
+        yield return BattleDirector.Instance.Play(Beat.GameOver);
+
         Debug.Log("ゲームオーバー");
         OnRunGameOver?.Invoke();
     }
@@ -286,11 +349,11 @@ public class RunManager:MonoBehaviour
     [ContextMenu("テスト:報酬の先頭を選ぶ")]
     private void TestPickFirstRewards()
     {
-        if(currentOrbOptions.Count>0)
+        if (currentOrbOptions.Count > 0)
         {
             SelectRewardOrb(currentOrbOptions[0]);
         }
-        if(currentPassiveOptions.Count>0)
+        if (currentPassiveOptions.Count > 0)
         {
             SelectRewardPassive(currentPassiveOptions[0]);
         }
