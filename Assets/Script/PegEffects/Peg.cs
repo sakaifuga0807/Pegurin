@@ -38,10 +38,15 @@ public class Peg : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (isHit) return;
-
         Orb orb = collision.gameObject.GetComponent<Orb>();
         if (orb == null) return;
+
+        HitBy(orb);
+    }
+
+    public void HitBy(Orb orb)
+    {
+        if (isHit) return;
 
         isHit = true;
         if (pegCollider != null) pegCollider.enabled = false;
@@ -58,7 +63,6 @@ public class Peg : MonoBehaviour
             pegEffect.Execute(context);
         }
 
-        // ★【重要】一度ヒットしたら、次回からは「ノーマルペグ」に変化させる処理
         if (!hasBeenDepleted && normalPegEffect != null)
         {
             hasBeenDepleted = true;

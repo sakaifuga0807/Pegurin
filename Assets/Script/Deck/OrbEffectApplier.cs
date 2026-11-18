@@ -12,6 +12,10 @@ public static class OrbEffectApplier
             case OrbEffectType.Vibes:
                 orbObj.AddComponent<VibesOrb>();
                 break;
+
+            case OrbEffectType.Bomb:
+                orbObj.AddComponent<BombOrb>();
+                break;
         }
     }
 }
