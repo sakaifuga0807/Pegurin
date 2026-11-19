@@ -1410,7 +1410,7 @@ MonoBehaviour:
   player: {fileID: 192724482}
   stateMachine: {fileID: 722819457}
   runManager: {fileID: 2089675872}
-  skeletonAnimation: {fileID: 0}
+  skeletonAnimation: {fileID: 1170540638}
   idleAnimation: idle
   attackAnimation: jump2
   hitAnimation: down
