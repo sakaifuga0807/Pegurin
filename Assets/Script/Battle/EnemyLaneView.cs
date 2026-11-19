@@ -18,6 +18,9 @@ public class EnemyLaneView:MonoBehaviour
     [Tooltip("敵が隣のマスへ移動する速さ")]
     [SerializeField] private float slideSpeed = 8f;
 
+    [Header("敵HPバー")]
+    [SerializeField] private EnemyHPBarView[] hpBarViews;
+
 
     [Header("確認用")]
     [SerializeField] private bool logCards = false;
@@ -86,6 +89,7 @@ public class EnemyLaneView:MonoBehaviour
         }
 
         RefreshAll();
+        BindHpBars(current);
     }
 
     private EnemyCardView CreateCard(Enemy enemy)
@@ -128,6 +132,20 @@ public class EnemyLaneView:MonoBehaviour
             {
                 Debug.Log($"[Card] {pair.Key.Data.EnemyName} マス{pair.Key.CurrentCell} " +
                           $"HP {pair.Key.CurrentHp}/{pair.Key.Data.MaxHp}：{preview.Text}");
+            }
+        }
+    }
+
+    private void BindHpBars(List<Enemy> enemies)
+    {
+        for (int i = 0; i < hpBarViews.Length; i++)
+        {
+            if (hpBarViews[i] == null) continue;
+
+            if (i < enemies.Count)
+            {
+                Enemy enemy = enemies[i];
+                hpBarViews[i].SetEnemy(enemy, cards[enemy].transform);
             }
         }
     }
