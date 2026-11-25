@@ -21,5 +21,5 @@ MonoBehaviour:
   actionPattern:
   - {fileID: 11400000, guid: e6ba84ee80f68a3408596bcd15200627, type: 2}
   icon: {fileID: 0}
-  modelPrefab: {fileID: 312320201983474571, guid: 3aa6818780362f946a7ff630e00e7f65, type: 3}
+  modelPrefab: {fileID: 5373414145543244546, guid: 066d65920abe64af18cd5b9a84c036a5, type: 3}
   visualScale: 1

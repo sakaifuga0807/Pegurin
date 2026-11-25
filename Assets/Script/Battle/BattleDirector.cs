@@ -5,36 +5,36 @@ using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
-//‰‰o‚Ì–ğ–ÚBƒ‹[ƒ‹‚ÌƒR[ƒh‚Í‚±‚Ì–¼‘O‚ÅA‚±‚±‚Å‰‰o‚ğÄ¶‚µ‚ÄI‚í‚é‚Ü‚Å‘Ò‚ÂB
+//æ¼”å‡ºã®å½¹ç›®ã€‚ãƒ«ãƒ¼ãƒ«ã®ã‚³ãƒ¼ãƒ‰ã¯ã“ã®åå‰ã§ã€ã“ã“ã§æ¼”å‡ºã‚’å†ç”Ÿã—ã¦çµ‚ã‚ã‚‹ã¾ã§å¾…ã¤ã€‚
 public enum Beat
 { 
-    OrbLanded,      //‹Ê‚ª—‚¿‚½’¼ŒãB
-    DamageTally,    //ÅIƒ_ƒ[ƒW‚ÌŠm’èB
-    HitEnemy,       //è‘O‚Ì“G‚Éƒ_ƒ[ƒWB
-    EnemyDefeated,  //“G‚ª“|‚ê‚½B
-    StageClear,     //ƒXƒe[ƒWƒNƒŠƒAB
-    HealShown,      //HP‰ñ•œ‚Ì•\¦B
-    MapTransition,  //ƒ}ƒbƒv‰‰oB
-    StageIntro,     //Ÿ‚ÌƒXƒe[ƒW“oêB
-    BossAppear,     //ƒ{ƒX‚Ì“oêB
-    EnemyMove,      //“G‚ªˆÚ“®B
-    EnemyAttack,    //“G‚ÌUŒ‚B
-    EnemyCharge,    //“G‚Ì—­‚ßB
-    EnemySummon,   //“G‚Ì¢Š«B
-    PlayerHit,      //ƒvƒŒƒCƒ„[‚ª”íƒ_ƒ[ƒWB
-    GameOver        //ƒQ[ƒ€ƒI[ƒo[B
+    OrbLanded,      //ç‰ãŒè½ã¡ãŸç›´å¾Œã€‚
+    DamageTally,    //æœ€çµ‚ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ç¢ºå®šã€‚
+    HitEnemy,       //æ‰‹å‰ã®æ•µã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã€‚
+    EnemyDefeated,  //æ•µãŒå€’ã‚ŒãŸã€‚
+    StageClear,     //ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¯ãƒªã‚¢ã€‚
+    HealShown,      //HPå›å¾©ã®è¡¨ç¤ºã€‚
+    MapTransition,  //ãƒãƒƒãƒ—æ¼”å‡ºã€‚
+    StageIntro,     //æ¬¡ã®ã‚¹ãƒ†ãƒ¼ã‚¸ç™»å ´ã€‚
+    BossAppear,     //ãƒœã‚¹ã®ç™»å ´ã€‚
+    EnemyMove,      //æ•µãŒç§»å‹•ã€‚
+    EnemyAttack,    //æ•µã®æ”»æ’ƒã€‚
+    EnemyCharge,    //æ•µã®æºœã‚ã€‚
+    EnemySummon,   //æ•µã®å¬å–šã€‚
+    PlayerHit,      //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒè¢«ãƒ€ãƒ¡ãƒ¼ã‚¸ã€‚
+    GameOver        //ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã€‚
 }
 
 /*
- *‰‰o‚Ì‘‹ŒûB‚Âˆ—‚ğ“®‚©‚·êŠ‚Å‚à‚ ‚èA‚â‚è’¼‚µEƒ^ƒCƒgƒ‹‚Ö‚Ì‚ÍCancelAll()‚Å‚·‚×‚Ä~‚ß‚éB
- *ƒ‹[ƒ‹‚ÌƒR[ƒh‚Í‰‰o‚Ì’†g‚ğ’m‚ç‚È‚¢B‰‰o‚ğì‚é‘¤‚ÍAß–Ú‚²‚Æ‚ÉRegister‚Å“o˜^‚·‚éB
- *“o˜^‚ª‚È‚¢ß–Ú‚Í’Z‚¢Šî’ê‚Ì‘Ò‚¿‚¾‚¯‚Åi‚ŞB
+ *æ¼”å‡ºã®çª“å£ã€‚æŒã¤å‡¦ç†ã‚’å‹•ã‹ã™å ´æ‰€ã§ã‚‚ã‚ã‚Šã€ã‚„ã‚Šç›´ã—ãƒ»ã‚¿ã‚¤ãƒˆãƒ«ã¸ã®æ™‚ã¯CancelAll()ã§ã™ã¹ã¦æ­¢ã‚ã‚‹ã€‚
+ *ãƒ«ãƒ¼ãƒ«ã®ã‚³ãƒ¼ãƒ‰ã¯æ¼”å‡ºã®ä¸­èº«ã‚’çŸ¥ã‚‰ãªã„ã€‚æ¼”å‡ºã‚’ä½œã‚‹å´ã¯ã€ç¯€ç›®ã”ã¨ã«Registerã§ç™»éŒ²ã™ã‚‹ã€‚
+ *ç™»éŒ²ãŒãªã„ç¯€ç›®ã¯çŸ­ã„åŸºåº•ã®å¾…ã¡ã ã‘ã§é€²ã‚€ã€‚
  */
 public class BattleDirector : MonoBehaviour
 {
     private static BattleDirector instance;
 
-    //ƒV[ƒ“‚É‚È‚¯‚ê‚ÎA©“®‚Åì‚éB
+    //ã‚·ãƒ¼ãƒ³ã«ãªã‘ã‚Œã°ã€è‡ªå‹•ã§ä½œã‚‹ã€‚
     public static BattleDirector Instance
     {
         get
@@ -51,24 +51,26 @@ public class BattleDirector : MonoBehaviour
         }
     }
 
-    //I—¹‚ÌŒã•Ğ•t‚¯‚æ‚¤B
+    //çµ‚äº†æ™‚ã®å¾Œç‰‡ä»˜ã‘ã‚ˆã†ã€‚
     public static BattleDirector Existing => instance;
 
-    [Header("‰‰o‚Ìİ’è")]
-    [Tooltip("‘Ò‚¿ŠÔ‚Ì”{—¦B0‚È‚ç‰‰o‚ğ”ò‚Î‚·B1‚ªƒfƒtƒHƒ‹ƒg")]
+    [Header("æ¼”å‡ºã®è¨­å®š")]
+    [Tooltip("å¾…ã¡æ™‚é–“ã®å€ç‡ã€‚0ãªã‚‰æ¼”å‡ºã‚’é£›ã°ã™ã€‚1ãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ")]
     [Min(0f)]
     [SerializeField] private float presentationScale = 1f;
-    [Tooltip("ˆê‚Â‚Ìß–Ú‚ÅA‰‰o‚ÌI‚í‚è‚ğ‘Ò‚ÂãŒÀ")]
+    [Tooltip("ä¸€ã¤ã®ç¯€ç›®ã§ã€æ¼”å‡ºã®çµ‚ã‚ã‚Šã‚’å¾…ã¤ä¸Šé™")]
     [Min(0.1f)]
-    [SerializeField] private float maxBeastSeconds = 8f;
+    [SerializeField] private float maxBeatSeconds = 8f;
+    [Tooltip("ç¢ºèªç”¨:ç¯€ç›®ã‚’å†ç”Ÿã™ã‚‹ãŸã³ã«Consoleã«å‡ºã™")]
+    [SerializeField] private bool logBeats=false;
 
     private readonly Dictionary<Beat, List<Func<object, IEnumerator>>> handlers =
         new Dictionary<Beat, List<Func<object, IEnumerator>>>();
 
-    //’†’i‚Ì‚½‚Ñ‚É‘‚¦‚éB‘Ò‚¿I‚í‚Á‚½Œã‚ÉA©•ª‚ªn‚ß‚½‚Æ‚«‚Æ“¯‚¶‚©‚ğŠm‚©‚ß‚é‚½‚ß‚Ég‚¤B
+    //ä¸­æ®µã®ãŸã³ã«å¢—ãˆã‚‹ã€‚å¾…ã¡çµ‚ã‚ã£ãŸå¾Œã«ã€è‡ªåˆ†ãŒå§‹ã‚ãŸã¨ãã¨åŒã˜ã‹ã‚’ç¢ºã‹ã‚ã‚‹ãŸã‚ã«ä½¿ã†ã€‚
     public int Generation { get; private set; }
 
-    //‘S•”‚Ì‘Ò‚¿ŠÔ‚ğ~‚ß‚½‚Æ‚«B‰‰o‚ğì‚é‘¤‚ªAŒ©‚½–Ú‚ğ‚à‚Æ‚É–ß‚·‚½‚ß‚Éó‚¯æ‚éB
+    //å…¨éƒ¨ã®å¾…ã¡æ™‚é–“ã‚’æ­¢ã‚ãŸã¨ãã€‚æ¼”å‡ºã‚’ä½œã‚‹å´ãŒã€è¦‹ãŸç›®ã‚’ã‚‚ã¨ã«æˆ»ã™ãŸã‚ã«å—ã‘å–ã‚‹ã€‚
     public event Action Cancelled;
 
     private void Awake()
@@ -76,22 +78,22 @@ public class BattleDirector : MonoBehaviour
         if (instance == null) instance = this;
     }
 
-    //‘Ò‚Âˆ—‚ğ“®‚©‚·B
+    //å¾…ã¤å‡¦ç†ã‚’å‹•ã‹ã™ã€‚
 
-    //‘Ò‚Âˆ—‚ğ‚±‚±‚Å“®‚©‚·B
+    //å¾…ã¤å‡¦ç†ã‚’ã“ã“ã§å‹•ã‹ã™ã€‚
     public Coroutine Run(IEnumerator routine)
     {
         return StartCoroutine(routine);
     }
 
-    //‘Ò‚ÂBŠÔ‚Ìˆµ‚¢‚ÍA‚±‚±‚¾‚¯B
+    //å¾…ã¤ã€‚æ™‚é–“ã®æ‰±ã„ã¯ã€ã“ã“ã ã‘ã€‚
     public IEnumerator Wait(float seconds)
     {
         seconds *= presentationScale;
         if (seconds > 0f) yield return new WaitForSeconds(seconds);
     }
 
-    //“®‚©‚µ‚Ä‚¢‚é‘Ò‚¿‚ğ‘S•”~‚ß‚éB
+    //å‹•ã‹ã—ã¦ã„ã‚‹å¾…ã¡ã‚’å…¨éƒ¨æ­¢ã‚ã‚‹ã€‚
     public void CancelAll()
     {
         StopAllCoroutines();
@@ -99,11 +101,11 @@ public class BattleDirector : MonoBehaviour
         Cancelled?.Invoke();
     }
 
-    //‰‰o‚Ì“o˜^B
+    //æ¼”å‡ºã®ç™»éŒ²ã€‚
 
     /*
-     * ß–Ú‚ÉA‰‰o‚ğ“o˜^‚·‚éBƒRƒ‹[ƒ`ƒ“‚ÅAI‚í‚Á‚½‚ç–ß‚éB
-     * “¯‚¶ß–Ú‚É•¡”“o˜^‚·‚é‚ÆA“¯‚ÉÄ¶dèA‘S•”‚ªI‚í‚é‚Ü‚Å‘Ò‚ÂB
+     * ç¯€ç›®ã«ã€æ¼”å‡ºã‚’ç™»éŒ²ã™ã‚‹ã€‚ã‚³ãƒ«ãƒ¼ãƒãƒ³ã§ã€çµ‚ã‚ã£ãŸã‚‰æˆ»ã‚‹ã€‚
+     * åŒã˜ç¯€ç›®ã«è¤‡æ•°ç™»éŒ²ã™ã‚‹ã¨ã€åŒæ™‚ã«å†ç”Ÿä»•æ‰‹ã€å…¨éƒ¨ãŒçµ‚ã‚ã‚‹ã¾ã§å¾…ã¤ã€‚
      */
     public void Register(Beat beat,Func<object,IEnumerator> handler)
     {
@@ -121,12 +123,14 @@ public class BattleDirector : MonoBehaviour
         if (handlers.TryGetValue(beat, out var list)) list.Remove(handler);
     }
 
-    //Ä¶B
+    //å†ç”Ÿã€‚
 
-    //ß–Ú‚ğÄ¶‚µ‚ÄAI‚í‚é‚Ü‚Å‘Ò‚ÂB“o˜^‚ª‚È‚¯‚ê‚ÎAŠî’ê‚Ì•b”‚¾‚¯‚ğ‚Ü‚ÂB
+    //ç¯€ç›®ã‚’å†ç”Ÿã—ã¦ã€çµ‚ã‚ã‚‹ã¾ã§å¾…ã¤ã€‚ç™»éŒ²ãŒãªã‘ã‚Œã°ã€åŸºåº•ã®ç§’æ•°ã ã‘ã‚’ã¾ã¤ã€‚
     public IEnumerator Play(Beat beat,object data=null)
     {
         if (presentationScale <= 0f) yield break;
+
+        if(logBeats) Debug.Log($"[Beat]{beat}");
 
         if(!handlers.TryGetValue(beat,out var list)||list.Count==0)
         {
@@ -141,16 +145,16 @@ public class BattleDirector : MonoBehaviour
             StartCoroutine(RunHandler(handler, data, () => pending--));
         }
 
-        //‘S•”‚ªI‚í‚é‚Ü‚Å‘Ò‚ÂBI‚í‚ç‚È‚¢‚Æ‚«‚ÍAãŒÀ‚Åæ‚Éi‚ŞB
+        //å…¨éƒ¨ãŒçµ‚ã‚ã‚‹ã¾ã§å¾…ã¤ã€‚çµ‚ã‚ã‚‰ãªã„ã¨ãã¯ã€ä¸Šé™ã§å…ˆã«é€²ã‚€ã€‚
         float elapsed = 0f;
-        while (pending > 0 && elapsed < maxBeastSeconds) 
+        while (pending > 0 && elapsed < maxBeatSeconds) 
         {
             elapsed += Time.deltaTime;
             yield return null;
         }
         if(pending>0)
         {
-            Debug.LogWarning($"[Director] ‰‰o{beat}‚ª{maxBeastSeconds}•b‚ÅI‚í‚ç‚È‚©‚Á‚½‚Ì‚ÅAæ‚Éi‚İ‚Ü‚·B");
+            Debug.LogWarning($"[Director] æ¼”å‡º{beat}ãŒ{maxBeatSeconds}ç§’ã§çµ‚ã‚ã‚‰ãªã‹ã£ãŸã®ã§ã€å…ˆã«é€²ã¿ã¾ã™ã€‚");
         }
 ;    }
 
@@ -162,7 +166,7 @@ public class BattleDirector : MonoBehaviour
     }
 
 
-    //‰‰o‚Ì“o˜^‚ª‚È‚¢‚Æ‚«‚ÌŠî’ê‚Ì‘Ò‚¿ŠÔB
+    //æ¼”å‡ºã®ç™»éŒ²ãŒãªã„ã¨ãã®åŸºåº•ã®å¾…ã¡æ™‚é–“ã€‚
     private static float DefaultSeconds(Beat beat)
     {
         switch (beat)
