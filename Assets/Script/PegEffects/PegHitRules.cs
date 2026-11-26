@@ -6,7 +6,7 @@ using UnityEngine;
 public static class PegHitRules
 { 
     //通常ペグ。
-    public static void HitNormal(PegHitContext contexet)
+    public static void HitNormal(PegHitContext context)
     {
         var battle = BattleContext.Current;
         if (battle == null) return;
@@ -16,9 +16,9 @@ public static class PegHitRules
         {
             damage = battle.PassiveManager.ModifyNormalPegDamage(damage);
         }
-        battle.DamageCalculator.AddPegHit(damage, contexet.orb.Power);
+        battle.DamageCalculator.AddPegHit(damage, context.orb.Power);
         SE.Play(SeCue.PegHitNormal);
-        Debug.Log($"[Peg]通常+{damage}(威力{contexet.orb.Power})");
+        Debug.Log($"[Peg]通常+{damage}(威力{context.orb.Power})");
     }
 
     //クリティカルペグ

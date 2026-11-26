@@ -157,7 +157,7 @@ public class Launcher : MonoBehaviour
 
     private void FireOrb(OrbData data)
     {
-        OrbData orbData = BattleContext.Current.DeckManager.CurrentOrb; //‚í
+        OrbData orbData = BattleContext.Current.DeckManager.CurrentOrb;
         GameObject prefab = PrefabFor(data);
         if(prefab==null||firePoint==null)
         {
