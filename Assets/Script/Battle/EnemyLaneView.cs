@@ -26,6 +26,9 @@ public class EnemyLaneView : MonoBehaviour
     [Header("Šm”F—p")]
     [SerializeField] private bool logCards = false;
 
+    [Header("“GHP”’l")]
+    [SerializeField] private EnemyHPText[] hpTextViews;
+
 
     private readonly Dictionary<Enemy, EnemyCardView> cards = new Dictionary<Enemy, EnemyCardView>();
     private EnemyLane lane;
@@ -106,6 +109,7 @@ public class EnemyLaneView : MonoBehaviour
 
         RefreshAll();
         BindHpBars(current);
+        BindHpTexts(current);
     }
 
     private EnemyCardView CreateCard(Enemy enemy)
@@ -162,6 +166,29 @@ public class EnemyLaneView : MonoBehaviour
             {
                 Enemy enemy = enemies[i];
                 hpBarViews[i].SetEnemy(enemy, cards[enemy].transform);
+            }
+        }
+    }
+
+    // “GHP”’l‚ğ“G‚É“o˜^
+    private void BindHpTexts(List<Enemy> enemies)
+    {
+        for (int i = 0; i < hpTextViews.Length; i++)
+        {
+            if (hpTextViews[i] == null) continue;
+
+            if (i < enemies.Count)
+            {
+                Enemy enemy = enemies[i];
+
+                hpTextViews[i].SetEnemy(
+                    enemy,
+                    cards[enemy].transform
+                );
+            }
+            else
+            {
+                hpTextViews[i].SetEnemy(null, null);
             }
         }
     }

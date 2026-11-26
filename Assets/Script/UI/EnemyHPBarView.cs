@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class EnemyHPBarView : MonoBehaviour
@@ -8,19 +9,31 @@ public class EnemyHPBarView : MonoBehaviour
     private Transform enemyTransform;
     private int previousHp = -1;
 
-    [SerializeField] private Vector3 offset = new Vector3(0f, 0f, 0);
+    [SerializeField] private Vector3 offset = new Vector3(0f, 0f, 0f);
+
+    // •‚¢HP”wŒi‰æ‘œ
+    [SerializeField] private Transform backgroundTransform;
 
     private void Awake()
     {
         originalScale = transform.localScale;
     }
 
-    // Enemy‚ğ“o˜^
-    public void SetEnemy(Enemy target)
+    // Enemy‚Æ’Ç]æ‚ğ“o˜^
+    public void SetEnemy(Enemy target, Transform targetTransform)
     {
         enemy = target;
+        enemyTransform = targetTransform;
 
         if (enemy == null) return;
+
+        // HPƒo[‚Æ”wŒi‚ğÄ•\¦
+        gameObject.SetActive(true);
+
+        if (backgroundTransform != null)
+        {
+            backgroundTransform.gameObject.SetActive(true);
+        }
 
         previousHp = enemy.CurrentHp;
         UpdateHpBar(enemy.CurrentHp, enemy.Data.MaxHp);
@@ -30,6 +43,20 @@ public class EnemyHPBarView : MonoBehaviour
     {
         if (enemy == null) return;
 
+        // “G‚ª“|‚³‚ê‚½‚çHPƒo[‚Æ”wŒi‚ğÁ‚·
+        if (enemy.CurrentHp <= 0)
+        {
+            gameObject.SetActive(false);
+
+            if (backgroundTransform != null)
+            {
+                backgroundTransform.gameObject.SetActive(false);
+            }
+
+            return;
+        }
+
+        // HP‚ª•Ï‰»‚µ‚½‚Æ‚«‚ÉXV
         if (previousHp != enemy.CurrentHp)
         {
             previousHp = enemy.CurrentHp;
@@ -37,6 +64,7 @@ public class EnemyHPBarView : MonoBehaviour
         }
     }
 
+    // Ô‚¢HPƒQ[ƒW‚ğXV
     private void UpdateHpBar(int currentHp, int maxHp)
     {
         if (maxHp <= 0) return;
@@ -53,24 +81,16 @@ public class EnemyHPBarView : MonoBehaviour
     {
         if (enemy == null || enemyTransform == null) return;
 
-        // “G‚ÌˆÊ’u‚ÉHPƒo[‚ğ’Ç]‚³‚¹‚é
-        transform.position = enemyTransform.position + offset;
+        // “G‚ÌˆÊ’u‚ğæ“¾
+        Vector3 targetPosition = enemyTransform.position + offset;
 
-        if (previousHp != enemy.CurrentHp)
+        // Ô‚¢HPƒQ[ƒW‚ğ’Ç]
+        transform.position = targetPosition;
+
+        // •‚¢”wŒi‰æ‘œ‚à’Ç]
+        if (backgroundTransform != null)
         {
-            previousHp = enemy.CurrentHp;
-            UpdateHpBar(enemy.CurrentHp, enemy.Data.MaxHp);
+            backgroundTransform.position = targetPosition;
         }
-    }
-
-    public void SetEnemy(Enemy target, Transform targetTransform)
-    {
-        enemy = target;
-        enemyTransform = targetTransform;
-
-        if (enemy == null) return;
-
-        previousHp = enemy.CurrentHp;
-        UpdateHpBar(enemy.CurrentHp, enemy.Data.MaxHp);
     }
 }
