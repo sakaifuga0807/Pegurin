@@ -25,6 +25,8 @@ public class Peg : MonoBehaviour
     private bool isHit = false;
     private PegBoard parentBoard;
 
+    public bool IsRefresh => pegEffect is RefreshPegEffect;
+
     private void Awake()
     {
         pegCollider = GetComponent<CircleCollider2D>();
