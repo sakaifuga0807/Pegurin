@@ -16,7 +16,7 @@ public readonly struct EnemyPreview
     public readonly int TurnsToRange;       //Approachingの時だけ
     public readonly EnemyIntent Intent;     //Actionの時だけ意味を持つ。
 
-    public EnemyPreview(EnemyPreviewKind kind,int turnsToRange=0,EnemyIntent intent=default)
+    public EnemyPreview(EnemyPreviewKind kind, int turnsToRange = 0, EnemyIntent intent = default)
     {
         Kind = kind;
         TurnsToRange = turnsToRange;
@@ -45,9 +45,7 @@ public readonly struct EnemyPreview
                     return "";
                 default:
                     return "";
-                   
             }
-
         }
     }
 }
@@ -56,12 +54,12 @@ public readonly struct EnemyPreview
 public static class EnemyIntentCalculator
 {
     //敵一体の予告。
-    public static EnemyPreview GetPreview(Enemy enemy,EnemyLane lane)
+    public static EnemyPreview GetPreview(Enemy enemy, EnemyLane lane)
     {
         //前のマスに敵がいれば待機。
-        if(!enemy.IsInRange)
+        if (!enemy.IsInRange)
         {
-            if(lane.IsBlockedAhead(enemy))
+            if (lane.IsBlockedAhead(enemy))
             {
                 return new EnemyPreview(EnemyPreviewKind.Waiting);
             }
@@ -82,10 +80,10 @@ public static class EnemyIntentCalculator
     public static int GetTotalIncomingDamage(EnemyLane lane)
     {
         int total = 0;
-        foreach(var enemy in lane.GetEnemiesFrontToBack())
+        foreach (var enemy in lane.GetEnemiesFrontToBack())
         {
             var preview = GetPreview(enemy, lane);
-            if(preview.Kind==EnemyPreviewKind.Action && preview.Intent.IsDamage)
+            if (preview.Kind == EnemyPreviewKind.Action && preview.Intent.IsDamage)
             {
                 total += preview.Intent.Value;
             }

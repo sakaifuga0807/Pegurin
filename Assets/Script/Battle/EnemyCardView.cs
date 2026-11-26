@@ -3,36 +3,46 @@ using UnityEngine;
 using UnityEngine.VFX;
 
 
-//“Gˆê‘Ì‚Ô‚ñ‚ÌŒ©‚½–ÚBƒvƒŒƒnƒu‚ª‚È‚­‚Ä‚àA“G‚Ìƒ‚ƒfƒ‹‚ğ•\¦‚Å‚«‚éB
-public class EnemyCardView:MonoBehaviour
+//æ•µä¸€ä½“ã¶ã‚“ã®è¦‹ãŸç›®ã€‚ãƒ—ãƒ¬ãƒãƒ–ãŒãªãã¦ã‚‚ã€æ•µã®ãƒ¢ãƒ‡ãƒ«ã‚’è¡¨ç¤ºã§ãã‚‹ã€‚
+public class EnemyCardView : MonoBehaviour
 {
-    [Header("ƒ‚ƒfƒ‹‚ğo‚·êŠ(‹ó‚È‚çA‚±‚ÌƒIƒuƒWƒFƒNƒg‚Ì’¼‰º)")]
+    [Header("ãƒ¢ãƒ‡ãƒ«ã‚’å‡ºã™å ´æ‰€(ç©ºãªã‚‰ã€ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç›´ä¸‹)")]
     [SerializeField] private Transform modelRoot;
 
-    [Header("¶¬‚Éˆê‰ñ‚¾‚¯")]
-    [SerializeField] private StringUnityEvent onNameText;    //“G‚Ì–¼‘OB
-    [SerializeField] private SpriteUnityEvent OnIcon;        //ƒAƒCƒRƒ“B
-    [SerializeField] private StringUnityEvent onRangeText;   //Ë’öB
+    [Header("ç”Ÿæˆæ™‚ã«ä¸€å›ã ã‘")]
+    [SerializeField] private StringUnityEvent onNameText;    //æ•µã®åå‰ã€‚
+    [SerializeField] private SpriteUnityEvent OnIcon;        //ã‚¢ã‚¤ã‚³ãƒ³ã€‚
+    [SerializeField] private StringUnityEvent onRangeText;   //å°„ç¨‹ã€‚
 
-    [Header("•Ï‚í‚é‚½‚Ñ‚É")]
+    [Header("å¤‰ã‚ã‚‹ãŸã³ã«")]
     [SerializeField] private FloatUnityEvent onHpRatio;
     [SerializeField] private StringUnityEvent onHpText;
     [SerializeField] private StringUnityEvent onPreviewText;
-    [SerializeField] private BoolUnityEvent onInRange;//Ë’ö“à‚©B
+    [SerializeField] private BoolUnityEvent onInRange;//å°„ç¨‹å†…ã‹ã€‚
+
+    private Animator modelAnimator;
 
     public Enemy Enemy { get; private set; }
 
-    //¶¬’¼Œã‚Éˆê‰ñŒÄ‚ÔB
+    public void SetTrigger(string triggerName)
+    {
+        if (modelAnimator != null && !string.IsNullOrEmpty(triggerName))
+        {
+            modelAnimator.SetTrigger(triggerName);
+        }
+    }
+
+    //ç”Ÿæˆç›´å¾Œã«ä¸€å›å‘¼ã¶ã€‚
     public void Bind(Enemy enemy)
     {
         Enemy = enemy;
         onNameText?.Invoke(enemy.Data.EnemyName);
         OnIcon?.Invoke(enemy.Data.Icon);
-        onRangeText?.Invoke($"Ë’ö{enemy.Data.Range}");
+        onRangeText?.Invoke($"å°„ç¨‹{enemy.Data.Range}");
         SpawnModel(enemy.Data);
     }
 
-    //”z’uEHPE—\‚ª•Ï‚í‚é‚½‚Ñ‚ÉŒÄ‚ÔB
+    //é…ç½®ãƒ»HPãƒ»äºˆå‘ŠãŒå¤‰ã‚ã‚‹ãŸã³ã«å‘¼ã¶ã€‚
     public void Refresh(EnemyPreview preview)
     {
         float ratio = Enemy.Data.MaxHp > 0 ? (float)Enemy.CurrentHp / Enemy.Data.MaxHp : 0f;
@@ -42,18 +52,18 @@ public class EnemyCardView:MonoBehaviour
         onInRange?.Invoke(Enemy.IsInRange);
     }
 
-    //“G‚ÌŒ©‚½–Ú‚ğ•\¦Bƒ‚ƒfƒ‹AƒAƒCƒRƒ“A‰¼‚Ì—§•û‘Ì‚Ì‡‚És‚¤SB
+    //æ•µã®è¦‹ãŸç›®ã‚’è¡¨ç¤ºã€‚ãƒ¢ãƒ‡ãƒ«ã€ã‚¢ã‚¤ã‚³ãƒ³ã€ä»®ã®ç«‹æ–¹ä½“ã®é †ã«è¡Œã†Sã€‚
     private void SpawnModel(EnemyData data)
     {
         Transform parent = modelRoot != null ? modelRoot : transform;
         GameObject visual;
 
-        if(data.ModelPrefab!=null)
+        if (data.ModelPrefab != null)
         {
             visual = Instantiate(data.ModelPrefab, parent);
             visual.transform.localPosition = Vector3.zero;
         }
-        else if(data.Icon!=null)
+        else if (data.Icon != null)
         {
             visual = new GameObject("Icon");
             visual.transform.SetParent(parent, false);
@@ -61,13 +71,15 @@ public class EnemyCardView:MonoBehaviour
         }
         else
         {
-            //ƒ‚ƒfƒ‹‚à‰æ‘œ‚à–¢İ’è‚Ìê‡‰¼‚Ì—§•û‘Ì‚ğ•\¦‚·‚éB
+            //ãƒ¢ãƒ‡ãƒ«ã‚‚ç”»åƒã‚‚æœªè¨­å®šã®å ´åˆä»®ã®ç«‹æ–¹ä½“ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
             visual = GameObject.CreatePrimitive(PrimitiveType.Cube);
             Destroy(visual.GetComponent<Collider>());
             visual.transform.SetParent(parent, false);
         }
 
-        //‘å‚«‚³‚Ì”{—¦‚ğ‘‚¯‚éB
+        //å¤§ãã•ã®å€ç‡ã‚’æ›¸ã‘ã‚‹ã€‚
         visual.transform.localScale *= data.VisualScale;
+
+        modelAnimator = visual.GetComponentInChildren<Animator>();
     }
 }
