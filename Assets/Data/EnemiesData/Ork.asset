@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ork
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: Ork
-  maxHp: 220
+  maxHp: 250
   attackPower: 18
   startCell: 4
   moveSpeed: 1

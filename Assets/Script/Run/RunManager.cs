@@ -36,6 +36,12 @@ public class RunManager : MonoBehaviour
     [Tooltip("タイトル画面ができるまでの確認用")]
     [SerializeField] private bool autoStart = true;
 
+    [Tooltip("確認用：最初に始めるステージ。")]
+    [SerializeField] private int debugStartStage = 0;
+
+    //確認用:パネルから切り替えで、次に始めるステージ。
+    private int debugJumpIndex = -1;
+
     public event Action OnRunStarted;           //ラン開始。
     public event Action OnReturnedToTitle;      //タイトルへ戻る。
 
@@ -89,7 +95,9 @@ public class RunManager : MonoBehaviour
             return;
         }
         var context = BattleContext.Current;
-        StageIndex = 0;
+        StageIndex = Mathf.Clamp(debugJumpIndex >= 0 ? debugJumpIndex : debugStartStage, 0, stages.Count - 1);
+        debugJumpIndex = -1;
+        if (StageIndex != 0) Debug.LogWarning($"[Run]ステージ{StageIndex + 1}から始めます");
         context.Player.ResetForRun();
         if (context.PassiveManager != null)
         {
@@ -344,6 +352,85 @@ public class RunManager : MonoBehaviour
 
         Debug.Log("ゲームオーバー");
         OnRunGameOver?.Invoke();
+    }
+
+    // ---- 【確認用】ステージの切り替えなど（パネルから呼ぶ） ----
+
+    public int StageCount => stages.Count;
+
+    public string StageNameAt(int index)
+    {
+        return (index >= 0 && index < stages.Count) ? stages[index].stageName : "";
+    }
+
+    //指定したステージ（0がステージ1）から始める。本番と同じ準備（敵、デッキ、ペグ、BGM）を通る。
+    //keepProgress が true なら、HP・デッキ・パッシブを引き継ぐ。false なら、最初の状態に戻す。
+    public void DebugJumpToStage(int index, bool keepProgress)
+    {
+        if (stages.Count == 0) return;
+        int target = Mathf.Clamp(index, 0, stages.Count - 1);
+
+        bool wasTitle = Phase == RunPhase.Title;
+        AbortBattle();
+        GameSpeed.SetPaused(false);
+
+        if (wasTitle || !keepProgress)
+        {
+            //最初から始めたときと同じ初期化をして、指定のステージから始める。
+            Phase = RunPhase.Title;
+            debugJumpIndex = target;
+            BeginRun();
+            return;
+        }
+
+        //HP・デッキ・パッシブを引き継いで、指定のステージから始める。
+        var context = BattleContext.Current;
+        if (context.Player.IsDead) context.Player.ResetForRun();   //HP0のままでは、遊べないため。
+
+        StageIndex = target;
+        OnRunStarted?.Invoke();   //クリア・ゲームオーバーの画面を閉じ、ナイトを待機に戻すため。
+        StartStage();
+    }
+
+    //このステージを、クリアしたことにする（敵を全員消して、クリアの流れへ）。戦闘中だけ。
+    public void DebugClearStage()
+    {
+        if (Phase != RunPhase.Battle) return;
+
+        OrbTracker.DestroyAll();
+        stateMachine.Stop();
+        BattleContext.Current.EnemyLane.Clear();
+        TryCompleteStage();
+    }
+
+    //HPを全回復する。
+    public void DebugHealPlayer()
+    {
+        var player = BattleContext.Current.Player;
+        if (!player.IsDead) player.Heal(player.MaxHp);
+    }
+
+    //パッシブを、全部入手する。
+    public void DebugGrantAllPassives()
+    {
+        var passives = BattleContext.Current.PassiveManager;
+        if (passives == null) return;
+
+        for (int guard = 0; guard < 10; guard++)
+        {
+            var candidates = passives.GetRewardCandidates();
+            if (candidates.Count == 0) break;
+            foreach (var passive in candidates) passives.Add(passive);
+        }
+    }
+
+    //報酬のオーブ（ボム・バイブス・ギガ）を、デッキに加える。次のステージの開始時に、山札へ入る。
+    public void DebugGrantRewardOrbs()
+    {
+        foreach (var orb in rewardOrbOptions)
+        {
+            BattleContext.Current.DeckManager.AddOrbToDeck(orb);
+        }
     }
 
     [ContextMenu("テスト:報酬の先頭を選ぶ")]
