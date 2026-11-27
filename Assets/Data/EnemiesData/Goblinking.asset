@@ -25,3 +25,4 @@ MonoBehaviour:
   icon: {fileID: 0}
   modelPrefab: {fileID: 6251977045722442677, guid: eebfe608cf5744a0b89a37b6ccdb02a1, type: 3}
   visualScale: 1
+  hpBarOffsetY: 0.4

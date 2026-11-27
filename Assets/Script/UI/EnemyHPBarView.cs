@@ -9,6 +9,9 @@ public class EnemyHPBarView : MonoBehaviour
     private Transform enemyTransform;
     private int previousHp = -1;
 
+    // “G‚Ì‰æ‘œEƒ‚ƒfƒ‹‚ğæ“¾
+    private Renderer[] enemyRenderers;
+
     [SerializeField] private Vector3 offset = new Vector3(0f, 0f, 0f);
 
     // •‚¢HP”wŒi‰æ‘œ
@@ -25,7 +28,21 @@ public class EnemyHPBarView : MonoBehaviour
         enemy = target;
         enemyTransform = targetTransform;
 
-        if (enemy == null) return;
+        // “G‚ª‚¢‚È‚¢ê‡‚ÍHPƒo[‚Æ”wŒi‚ğ”ñ•\¦
+        if (enemy == null)
+        {
+            gameObject.SetActive(false);
+
+            if (backgroundTransform != null)
+            {
+                backgroundTransform.gameObject.SetActive(false);
+            }
+
+            return;
+        }
+
+        // “G‚Ì‰æ‘œEƒ‚ƒfƒ‹‚ğæ“¾
+        enemyRenderers = enemyTransform.GetComponentsInChildren<Renderer>();
 
         // HPƒo[‚Æ”wŒi‚ğÄ•\¦
         gameObject.SetActive(true);
@@ -81,8 +98,10 @@ public class EnemyHPBarView : MonoBehaviour
     {
         if (enemy == null || enemyTransform == null) return;
 
-        // “G‚ÌˆÊ’u‚ğæ“¾
         Vector3 targetPosition = enemyTransform.position + offset;
+
+        // “G‚²‚Æ‚ÌHPƒo[‚Ì‚‚³‚ğ‰ÁZ
+        targetPosition.y += enemy.Data.HpBarOffsetY;
 
         // Ô‚¢HPƒQ[ƒW‚ğ’Ç]
         transform.position = targetPosition;

@@ -167,6 +167,10 @@ public class EnemyLaneView : MonoBehaviour
                 Enemy enemy = enemies[i];
                 hpBarViews[i].SetEnemy(enemy, cards[enemy].transform);
             }
+            else
+            {
+                hpBarViews[i].SetEnemy(null, null);
+            }
         }
     }
 

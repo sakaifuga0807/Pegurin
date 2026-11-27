@@ -32,6 +32,10 @@ public class EnemyData : ScriptableObject
     [Tooltip("敵の見た目の大きさの倍率。")]
     [Min(0.1f)][SerializeField] private float visualScale = 1f;
 
+    [Header("HPバー表示")]
+    [Tooltip("HPバーの高さ調整")]
+    [SerializeField] private float hpBarOffsetY = 0f;
+
     //読み込み専用。
     public string EnemyName => enemyName;
     public int MaxHp => maxHp;
@@ -43,6 +47,7 @@ public class EnemyData : ScriptableObject
     public Sprite Icon => icon;
     public GameObject ModelPrefab => modelPrefab;
     public float VisualScale => visualScale;
+    public float HpBarOffsetY => hpBarOffsetY;
 
     //インスペクターでの入力ミスを範囲内に補正。
     private void OnValidate()
