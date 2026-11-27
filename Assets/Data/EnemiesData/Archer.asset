@@ -22,5 +22,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e6ba84ee80f68a3408596bcd15200627, type: 2}
   - {fileID: 11400000, guid: c702c9bd37dd5cb47a1f16b0c73f4b76, type: 2}
   icon: {fileID: 0}
-  modelPrefab: {fileID: 5667695128728456299, guid: 214db3b45e9e64ddf9970515c298f1ad, type: 3}
+  modelPrefab: {fileID: -8653719598885068355, guid: 424ce3e5e29190a4ab669f702ad867bc, type: 3}
   visualScale: 1
