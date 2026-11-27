@@ -6,7 +6,7 @@ public class EnemyHPText : MonoBehaviour
     private Enemy enemy;
     private Transform enemyTransform;
 
-    [SerializeField] private Vector3 offset = new Vector3(0f, 1.5f, 0f);
+    [SerializeField] private Vector3 offset = new Vector3(0f, 1.2f, 0f);
 
     // Enemy‚Æ’Ç]æ‚ğ“o˜^
     public void SetEnemy(Enemy target, Transform targetTransform)
@@ -31,6 +31,9 @@ public class EnemyHPText : MonoBehaviour
 
         // HPƒo[‚Æ“¯‚¶“G‚ÌˆÊ’u‚ğæ“¾
         Vector3 targetPosition = enemyTransform.position + offset;
+
+        // HPƒo[‚Æ“¯‚¶‚‚³’²®‚ğ“K—p
+        targetPosition.y += enemy.Data.HpBarOffsetY;
 
         // ”’l‚ğ“G‚É’Ç]
         transform.position = targetPosition;

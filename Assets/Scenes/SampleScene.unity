@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b67b5c23a6f084d4683e6322e65389e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHPText
-  offset: {x: 0, y: 1.5, z: 0}
+  offset: {x: 0, y: 1.2, z: 0}
 --- !u!4 &110819278
 Transform:
   m_ObjectHideFlags: 0
@@ -968,7 +968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b67b5c23a6f084d4683e6322e65389e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHPText
-  offset: {x: 0, y: 1.5, z: 0}
+  offset: {x: 0, y: 1.2, z: 0}
 --- !u!4 &712588340
 Transform:
   m_ObjectHideFlags: 0
