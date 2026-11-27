@@ -56,15 +56,42 @@ public class EnemyHPText : MonoBehaviour
         float y = Screen.height - screenPos.y;
 
         GUIStyle style = new GUIStyle();
-        style.fontSize = 16;
+        style.fontSize = 25;
         style.fontStyle = FontStyle.Bold;
         style.normal.textColor = Color.white;
         style.alignment = TextAnchor.MiddleCenter;
 
-        GUI.Label(
-            new Rect(x - 50, y - 15, 100, 30),
-            enemy.CurrentHp + " / " + enemy.Data.MaxHp,
-            style
-        );
+        // HP•\¦•¶š—ñ
+        string hpText = enemy.CurrentHp + " / " + enemy.Data.MaxHp;
+
+
+        // •‚¢‰æ‚è
+        GUIStyle outlineStyle = new GUIStyle(style);
+        outlineStyle.normal.textColor = Color.black;
+
+        // •‚¢‰æ‚è‚ğ‘¾‚­‚·‚é
+        for (int dx = -2; dx <= 2; dx++)
+        {
+            for (int dy = -2; dy <= 2; dy++)
+            {
+                if (dx == 0 && dy == 0) continue;
+
+                GUI.Label(
+                    new Rect(x - 50 + dx, y - 15 + dy, 100, 30),
+                    hpText,
+                    outlineStyle
+                );
+            }
+        }
+
+        // ”’‚¢•¶š‚ğ­‚µd‚Ë‚Ä‘¾‚­‚·‚é
+        GUI.Label(new Rect(x - 51, y - 15, 100, 30), hpText, style);
+        GUI.Label(new Rect(x - 49, y - 15, 100, 30), hpText, style);
+        GUI.Label(new Rect(x - 50, y - 16, 100, 30), hpText, style);
+        GUI.Label(new Rect(x - 50, y - 14, 100, 30), hpText, style);
+
+        // ’†‰›‚É”’‚¢•¶š‚ğ•\¦
+        GUI.Label(new Rect(x - 50, y - 15, 100, 30), hpText, style);
+
     }
 }
