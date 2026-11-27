@@ -47,6 +47,7 @@ public class EnemyLaneView : MonoBehaviour
         director.Register(Beat.EnemyAttack, OnEnemyAttackBeat);
         director.Register(Beat.HitEnemy, OnHitEnemyBeat);
         director.Register(Beat.EnemyDefeated, OnEnemyDefeatedBeat);
+        director.Register(Beat.EnemyCharge, OnEnemyChargeBeat);
     }
 
     private void OnDestroy()
@@ -62,6 +63,7 @@ public class EnemyLaneView : MonoBehaviour
             director.Unregister(Beat.EnemyAttack, OnEnemyAttackBeat);
             director.Unregister(Beat.HitEnemy, OnHitEnemyBeat);
             director.Unregister(Beat.EnemyDefeated, OnEnemyDefeatedBeat);
+            director.Unregister(Beat.EnemyCharge, OnEnemyChargeBeat);
         }
     }
 
@@ -191,7 +193,8 @@ public class EnemyLaneView : MonoBehaviour
     {
         if (data is EnemyActionBeat beat && cards.TryGetValue(beat.Enemy, out var card) && card != null)
         {
-            card.SetTrigger("Attack");
+            string trigger = beat.Intent.Type == EnemyIntentType.HeavyAttack ? "HeavyAttack" : "Attack";
+            card.SetTrigger(trigger);
         }
 
         //UŒ‚‰‰o‚Ì‘Ò‚¿ŠÔB
@@ -215,5 +218,14 @@ public class EnemyLaneView : MonoBehaviour
             card.SetTrigger("Death");
         }
         yield return BattleDirector.Instance.Wait(0.65f);
+    }
+
+    private IEnumerator OnEnemyChargeBeat(object data)
+    {
+        if (data is EnemyActionBeat beat && cards.TryGetValue(beat.Enemy, out var card) && card != null)
+        {
+            card.SetTrigger("Charge");
+        }
+        yield return BattleDirector.Instance.Wait(0.5f);
     }
 }
